@@ -72,28 +72,76 @@
 }
 
 @media (max-width: 768px) {
+  .header {
+    position: relative;
+  }
+
   .menu-toggle {
-    display: flex;
+    display: none;
   }
 
   .nav-menu {
-    position: absolute;
-    top: 70px;
+    position: fixed;
+    bottom: 0;
     left: 0;
     right: 0;
     background: white;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transform: translateY(-100%);
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s;
-  }
-
-  .nav-menu.active {
-    transform: translateY(0);
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 12px 8px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transform: none;
     opacity: 1;
     visibility: visible;
+    gap: 0;
+    z-index: 9999;
+    border-top: 2px solid var(--cinza-claro);
+  }
+
+  .nav-menu li {
+    list-style: none;
+    flex: 1;
+  }
+
+  .nav-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    color: var(--cinza-slate);
+    font-size: 0;
+    transition: all 0.3s;
+    border-radius: 8px;
+  }
+
+  .nav-menu a::before {
+    font-size: 28px;
+  }
+
+  .nav-menu li:nth-child(1) a::before { content: '🏠'; }
+  .nav-menu li:nth-child(2) a::before { content: '⚙️'; }
+  .nav-menu li:nth-child(3) a::before { content: '💼'; }
+  .nav-menu li:nth-child(4) a::before { content: '👤'; }
+  .nav-menu li:nth-child(5) a::before { content: '💬'; }
+
+  .nav-menu a:hover,
+  .nav-menu a:active {
+    background: var(--cinza-claro);
+  }
+
+  .btn-contato {
+    background: transparent !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+  }
+
+  .btn-contato::before {
+    color: var(--laranja-alerta);
+  }
+
+  .btn-contato:hover {
+    background: var(--cinza-claro) !important;
+    transform: none !important;
+    box-shadow: none !important;
   }
 }
