@@ -113,6 +113,10 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    padding: 120px 0 100px;
+  }
+
   .hero .container {
     grid-template-columns: 1fr;
     gap: 40px;
