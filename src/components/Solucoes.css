@@ -1,0 +1,244 @@
+.solucoes {
+  padding: 100px 0;
+  background: white;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 42px;
+  margin-bottom: 16px;
+  color: var(--azul-profundo);
+}
+
+.section-subtitle {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 60px;
+  color: var(--cinza-slate);
+}
+
+.solucoes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 992px) {
+  .solucoes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.solucao-card {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  border: 2px solid #E2E8F0;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.solucao-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  transition: height 0.3s;
+}
+
+.solucao-card.verde::before {
+  background: var(--verde-esmeralda);
+}
+
+.solucao-card.ciano::before {
+  background: var(--ciano-digital);
+}
+
+.solucao-card.laranja::before {
+  background: var(--laranja-alerta);
+}
+
+.solucao-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(10, 37, 64, 0.15);
+}
+
+.solucao-card:hover::before {
+  height: 100%;
+  opacity: 0.05;
+}
+
+.solucao-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+
+.solucao-card h3 {
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: var(--azul-profundo);
+}
+
+.solucao-card p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .solucoes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 32px;
+  }
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 37, 64, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(10, 37, 64, 0.3);
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--cinza-claro);
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 20px;
+  color: var(--azul-profundo);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  font-weight: bold;
+}
+
+.modal-close:hover {
+  background: var(--laranja-alerta);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.modal-icon {
+  font-size: 48px;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--verde-esmeralda) 0%, var(--ciano-digital) 100%);
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.modal-content h2 {
+  color: var(--azul-profundo);
+  font-size: 28px;
+  margin: 0;
+}
+
+.modal-intro {
+  font-size: 18px;
+  color: var(--azul-profundo);
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+
+.modal-intro-text {
+  font-size: 16px;
+  color: var(--cinza-slate);
+  margin-bottom: 30px;
+  line-height: 1.7;
+}
+
+.modal-section {
+  margin-bottom: 24px;
+}
+
+.modal-section h3 {
+  color: var(--azul-profundo);
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.modal-section p {
+  font-size: 16px;
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+
+.modal-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.modal-section ul li {
+  padding: 12px 0;
+  padding-left: 24px;
+  position: relative;
+  color: var(--cinza-slate);
+  line-height: 1.6;
+}
+
+.modal-section ul li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--verde-esmeralda);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.modal-section ul li strong {
+  color: var(--azul-profundo);
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    padding: 30px 20px;
+  }
+
+  .modal-content h2 {
+    font-size: 24px;
+  }
+
+  .modal-intro {
+    font-size: 16px;
+  }
+}

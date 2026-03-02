@@ -1,0 +1,141 @@
+.sobre {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #F8FAFC 0%, #ffffff 100%);
+}
+
+.sobre-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.sobre-text h2 {
+  font-size: 42px;
+  margin-bottom: 24px;
+  color: var(--azul-profundo);
+}
+
+.sobre-text p {
+  font-size: 18px;
+  margin-bottom: 20px;
+  line-height: 1.8;
+}
+
+.sobre-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--laranja-alerta);
+  margin-bottom: 8px;
+  white-space: nowrap;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--cinza-slate);
+  font-weight: 600;
+}
+
+.sobre-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kea-symbol {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pilar {
+  width: 60px;
+  height: 200px;
+  background: var(--azul-profundo);
+  border-radius: 8px;
+  position: absolute;
+  left: 50px;
+}
+
+.barras {
+  position: absolute;
+  right: 50px;
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
+}
+
+.barra {
+  width: 40px;
+  border-radius: 6px;
+  animation: growUp 1.5s ease-out;
+}
+
+.b1 {
+  height: 80px;
+  background: var(--ciano-digital);
+}
+
+.b2 {
+  height: 120px;
+  background: var(--verde-esmeralda);
+}
+
+.b3 {
+  height: 160px;
+  background: var(--laranja-alerta);
+}
+
+@keyframes growUp {
+  from {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+}
+
+@media (max-width: 768px) {
+  .sobre-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .sobre-text h2 {
+    font-size: 32px;
+  }
+
+  .sobre-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .kea-symbol {
+    width: 200px;
+    height: 200px;
+  }
+
+  .pilar {
+    width: 40px;
+    height: 140px;
+  }
+
+  .barra {
+    width: 30px;
+  }
+}

@@ -1,0 +1,140 @@
+.hero {
+  padding: 100px 0;
+  background: linear-gradient(135deg, #F8FAFC 0%, #ffffff 100%);
+}
+
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-title {
+  font-size: 52px;
+  line-height: 1.2;
+  margin-bottom: 24px;
+  color: var(--azul-profundo);
+}
+
+.highlight-verde {
+  color: var(--verde-esmeralda);
+}
+
+.highlight-laranja {
+  color: var(--laranja-alerta);
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  margin-bottom: 40px;
+  color: var(--cinza-slate);
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.btn {
+  padding: 16px 32px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-primary {
+  background: var(--laranja-alerta);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 107, 0, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--azul-profundo);
+  border: 2px solid var(--azul-profundo);
+}
+
+.btn-secondary:hover {
+  background: var(--azul-profundo);
+  color: white;
+}
+
+.hero-visual {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.visual-card {
+  background: white;
+  padding: 60px;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(10, 37, 64, 0.15);
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+.metric-bar {
+  width: 60px;
+  border-radius: 8px;
+  animation: growBar 1.5s ease-out;
+}
+
+.bar-1 {
+  height: 100px;
+  background: var(--ciano-digital);
+}
+
+.bar-2 {
+  height: 150px;
+  background: var(--verde-esmeralda);
+}
+
+.bar-3 {
+  height: 200px;
+  background: var(--laranja-alerta);
+}
+
+@keyframes growBar {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero .container {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .hero-title {
+    font-size: 36px;
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .visual-card {
+    padding: 40px;
+  }
+
+  .metric-bar {
+    width: 40px;
+  }
+}
