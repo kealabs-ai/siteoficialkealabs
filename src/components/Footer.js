@@ -25,7 +25,7 @@ const Footer = () => {
             <div className="footer-column">
               <h4>Serviços</h4>
               <a href="#servicos">Desenvolvimento de APIs</a>
-              <a href="#servicos">Desenvolvimento Front-end</a>
+              <a href="#servicos">Front-end e Sites Corporativos</a>
               <a href="#servicos">Engenharia de IA</a>
               <a href="#servicos">Criação de Dashboards</a>
               <a href="#servicos">Consultoria Lean Delivery</a>
@@ -35,6 +35,7 @@ const Footer = () => {
         
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} Kealabs. Todos os direitos reservados.</p>
+          <p>CNPJ: 15.564.522/0001-93</p>
         </div>
       </div>
     </footer>

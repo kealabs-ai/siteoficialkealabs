@@ -7,7 +7,7 @@ const Hero = () => {
       <div className="container">
         <div className="hero-content">
           <h1 className="hero-title">
-            Transforme Dados em <span className="highlight-verde">Inteligência</span> com <span className="highlight-laranja">IA Avançada</span>
+            Transforme Dados em <span className="highlight-verde">Inteligência</span> com <span className="highlight-laranja">IA</span>
           </h1>
           <p className="hero-subtitle">
             Soluções completas em Business Intelligence, Data Analytics e Agentes de IA para impulsionar seu negócio com decisões baseadas em dados.

@@ -12,7 +12,7 @@ const Solucoes = () => {
       icon: '🔌'
     },
     {
-      titulo: 'Desenvolvimento Front-end',
+      titulo: 'Desenvolvimento Front-end e Sites Corporativos',
       descricao: 'Crie telas inteligentes e intuitivas. Importe dados de XLS, CSV e PDFs de forma automática, eliminando o trabalho manual e aumentando a produtividade.',
       cor: 'ciano',
       icon: '💻'
@@ -116,7 +116,7 @@ const Solucoes = () => {
             <button className="modal-close" onClick={() => setModalOpen(null)}>✕</button>
             <div className="modal-header">
               <div className="modal-icon">💻</div>
-              <h2>Desenvolvimento Front-end</h2>
+              <h2>Desenvolvimento Front-end e Sites Corporativos</h2>
             </div>
             <p className="modal-intro">
               Como a Kealabs cria telas inteligentes?

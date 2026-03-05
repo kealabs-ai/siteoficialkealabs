@@ -22,8 +22,34 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--azul-profundo);
-  background-color: #ffffff;
+  background: 
+    linear-gradient(135deg, rgba(240, 245, 250, 0.95) 0%, rgba(220, 230, 240, 0.95) 100%),
+    repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0, 180, 216, 0.06) 35px, rgba(0, 180, 216, 0.06) 70px),
+    repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(16, 185, 129, 0.06) 35px, rgba(16, 185, 129, 0.06) 70px);
+  background-attachment: fixed;
   scroll-behavior: smooth;
+  position: relative;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 30%, rgba(0, 180, 216, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(10, 37, 64, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  animation: bgPulse 15s ease-in-out infinite;
+}
+
+@keyframes bgPulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
 }
 
 h1, h2, h3 {
@@ -39,6 +65,8 @@ p {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
