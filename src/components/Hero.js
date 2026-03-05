@@ -23,6 +23,20 @@ const Hero = () => {
             <div className="metric-bar bar-2"></div>
             <div className="metric-bar bar-3"></div>
           </div>
+          
+          <div className="stats-row">
+            <div className="stat-card">
+              <div className="stat-icon">🚀</div>
+              <div className="stat-value">+40%</div>
+              <div className="stat-label">Produtividade</div>
+            </div>
+            
+            <div className="stat-card">
+              <div className="stat-icon">🎯</div>
+              <div className="stat-value">100%</div>
+              <div className="stat-label">Satisfação</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
