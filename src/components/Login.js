@@ -21,7 +21,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await fetch('http://72.60.140.128:6002/api/v1/auth/login', {
+      const response = await fetch('https://srv1023256.hstgr.cloud/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,13 +32,14 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('kea_client_id', data.kea_client_id);
-        localStorage.setItem('role_id', data.role_id);
-        localStorage.setItem('unit_id', data.unit_id);
-        window.location.href = 'http://kealabs.cloud:3002/login';
+        // Armazena o token JWT
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        
+        // Redireciona para o sistema
+        window.location.href = 'https://kealabs.cloud';
       } else {
-        setError('Usuário ou senha inválidos');
+        setError(data.message || 'Usuário ou senha inválidos');
       }
     } catch (err) {
       setError('Erro ao conectar com o servidor');
