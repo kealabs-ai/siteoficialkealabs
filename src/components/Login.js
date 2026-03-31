@@ -32,8 +32,9 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Armazena o token JWT
-        localStorage.setItem('token', data.token);
+        // Armazena os tokens JWT
+        localStorage.setItem('access_token', data.access_token);
+        localStorage.setItem('refresh_token', data.refresh_token);
         localStorage.setItem('user', JSON.stringify(data.user));
         
         // Redireciona para o sistema
@@ -42,6 +43,7 @@ const Login = () => {
         setError(data.message || 'Usuário ou senha inválidos');
       }
     } catch (err) {
+      console.error('Erro de autenticação:', err);
       setError('Erro ao conectar com o servidor');
     } finally {
       setLoading(false);
