@@ -4,7 +4,7 @@ import logo from '../assets/kealabs_logo_strategic.png';
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    email: '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
@@ -64,15 +64,16 @@ const Login = () => {
             {error && <div className="login-error">{error}</div>}
             
             <div className="form-group">
-              <label htmlFor="username">Usuário</label>
+              <label htmlFor="email">E-mail</label>
               <input
-                type="text"
-                id="username"
-                name="username"
-                value={formData.username}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
                 disabled={loading}
+                placeholder="seu@email.com"
               />
             </div>
 
