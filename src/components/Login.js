@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import './Login.css';
 import logo from '../assets/kealabs_logo_strategic.png';
 
 const Login = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -32,12 +34,7 @@ const Login = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Armazena os tokens JWT
-        localStorage.setItem('access_token', data.access_token);
-        localStorage.setItem('refresh_token', data.refresh_token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        
-        // Redireciona para o sistema
+        login(data.user, data.access_token, data.refresh_token);
         window.location.href = 'https://kealabs.cloud';
       } else {
         setError(data.message || 'Usuário ou senha inválidos');

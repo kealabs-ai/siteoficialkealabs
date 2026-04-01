@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Solucoes from './components/Solucoes';
@@ -11,21 +12,23 @@ import './styles/global.css';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={
-          <div className="App">
-            <Header />
-            <Hero />
-            <Solucoes />
-            <Sobre />
-            <Contato />
-            <Footer />
-          </div>
-        } />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={
+            <div className="App">
+              <Header />
+              <Hero />
+              <Solucoes />
+              <Sobre />
+              <Contato />
+              <Footer />
+            </div>
+          } />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
