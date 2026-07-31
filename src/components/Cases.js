@@ -15,6 +15,32 @@ const cases = [
       { valor: '90 dias', label: 'de implementação' },
     ],
   },
+  {
+    id: 2,
+    tag: 'Dashboard BI',
+    titulo: 'Aumento de 45% na eficiência operacional',
+    cliente: 'Empresa de e-commerce',
+    descricao:
+      'Desenvolvemos um dashboard integrado que consolidou dados de vendas, estoque e logística, permitindo decisões em tempo real.',
+    metricas: [
+      { valor: '45%', label: 'mais eficiência' },
+      { valor: '60 dias', label: 'de implementação' },
+      { valor: '5 áreas', label: 'integradas' },
+    ],
+  },
+  {
+    id: 3,
+    tag: 'IA & Agentes',
+    titulo: 'Redução de 80% no tempo de análise de dados',
+    cliente: 'Consultoria empresarial',
+    descricao:
+      'Implementamos agentes de IA para processar e analisar grandes volumes de dados, gerando relatórios executivos automaticamente.',
+    metricas: [
+      { valor: '80%', label: 'menos tempo' },
+      { valor: '10x', label: 'mais análises' },
+      { valor: '45 dias', label: 'de implementação' },
+    ],
+  },
 ];
 
 const Cases = () => {

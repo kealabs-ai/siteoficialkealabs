@@ -1,0 +1,100 @@
+.client-header {
+  background-color: #0A2540;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.client-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.client-nav .logo img {
+  height: 40px;
+  width: auto;
+}
+
+.client-nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.client-nav-menu a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.client-nav-menu a:hover {
+  color: #00B4D8;
+}
+
+.btn-perfil {
+  background-color: #10B981;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  color: #fff !important;
+  transition: background-color 0.3s ease;
+}
+
+.btn-perfil:hover {
+  background-color: #059669;
+  color: #fff !important;
+}
+
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 5px;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background-color: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .client-nav-menu {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background-color: #0A2540;
+    gap: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .client-nav-menu.active {
+    max-height: 300px;
+  }
+
+  .client-nav-menu li {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .btn-perfil {
+    margin: 0.5rem 1rem;
+  }
+}

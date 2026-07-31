@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  background-color: #f9fafb;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.client-main {
+  padding: 2rem 0;
+  min-height: calc(100vh - 60px);
+}
+
+.client-main h1 {
+  color: #0A2540;
+  margin-bottom: 1rem;
+}
+
+.client-main p {
+  color: #64748B;
+  font-size: 1.1rem;
+}
