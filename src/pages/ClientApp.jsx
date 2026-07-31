@@ -4,21 +4,17 @@ import '../styles/global.css';
 import Login from '../components/ClientApp/Login';
 import ClientHeader from '../components/ClientApp/ClientHeader';
 
-interface UserData {
-  email: string;
-}
-
-const ClientApp: React.FC = () => {
+const ClientApp = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<UserData | null>(null);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  const handleLogin = (userData: UserData): void => {
+  const handleLogin = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
   };
 
-  const handleLogout = (): void => {
+  const handleLogout = () => {
     setUser(null);
     setIsAuthenticated(false);
     navigate('/');
@@ -30,7 +26,7 @@ const ClientApp: React.FC = () => {
 
   return (
     <div className="App">
-      <ClientHeader onLogout={handleLogout} user={user || undefined} />
+      <ClientHeader onLogout={handleLogout} user={user} />
       <main className="client-main">
         <div className="container">
           <h1>Bem-vindo, {user?.email}!</h1>

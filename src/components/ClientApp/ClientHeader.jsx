@@ -1,19 +1,10 @@
 import React, { useState } from 'react';
 import './ClientHeader.css';
 
-interface ClientHeaderProps {
-  onLogout: () => void;
-  user?: UserInfo;
-}
-
-interface UserInfo {
-  email: string;
-}
-
-const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
+const ClientHeader = ({ onLogout, user }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogoutClick = (): void => {
+  const handleLogoutClick = () => {
     setMenuOpen(false);
     onLogout();
   };

@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
 import './Login.css';
 
-interface LoginProps {
-  onLogin: (userData: UserData) => void;
-}
-
-interface UserData {
-  email: string;
-}
-
-const Login: React.FC<LoginProps> = ({ onLogin }) => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
