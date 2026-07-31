@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import Solucoes from './components/Solucoes';
 import Sobre from './components/Sobre';
+import Cases from './components/Cases';
 import Contato from './components/Contato';
 import Footer from './components/Footer';
 import Login from './components/Login';
@@ -22,6 +23,7 @@ function App() {
               <Hero />
               <Solucoes />
               <Sobre />
+              <Cases />
               <Contato />
               <Footer />
             </div>
