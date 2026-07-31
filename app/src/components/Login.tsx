@@ -1,4 +1,5 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
+import { api } from '../lib/api';
 import './Login.css';
 
 interface LoginProps {
@@ -27,10 +28,16 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     }
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await api.post<{ access_token: string; user: { email: string } }>(
+        '/auth/login',
+        { email, password }
+      );
+      
+      const { access_token } = response.data;
+      localStorage.setItem('access_token', access_token);
       onLogin({ email });
-    } catch (err) {
-      setError('Erro ao fazer login. Tente novamente.');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erro ao fazer login. Tente novamente.');
     } finally {
       setLoading(false);
     }

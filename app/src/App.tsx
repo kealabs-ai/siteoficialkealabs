@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './styles/global.css';
 import Login from './components/Login';
 import ClientHeader from './components/ClientHeader';
+import Dashboard from './pages/Dashboard';
+import Builder from './pages/Builder';
 
 interface UserData {
   email: string;
 }
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    !!localStorage.getItem('access_token')
+  );
   const [user, setUser] = useState<UserData | null>(null);
 
   const handleLogin = (userData: UserData): void => {
@@ -19,6 +24,7 @@ const App: React.FC = () => {
   const handleLogout = (): void => {
     setUser(null);
     setIsAuthenticated(false);
+    localStorage.removeItem('access_token');
   };
 
   if (!isAuthenticated) {
@@ -26,15 +32,19 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="App">
-      <ClientHeader onLogout={handleLogout} user={user || undefined} />
-      <main className="client-main">
-        <div className="container">
-          <h1>Bem-vindo, {user?.email}!</h1>
-          <p>Você está na sua área de cliente Kealabs</p>
-        </div>
-      </main>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <ClientHeader onLogout={handleLogout} user={user || undefined} />
+        <main className="client-main">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/builder" element={<Builder />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
   );
 };
 

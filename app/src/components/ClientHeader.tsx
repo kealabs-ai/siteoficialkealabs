@@ -1,48 +1,52 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './ClientHeader.css';
 
 interface ClientHeaderProps {
   onLogout: () => void;
-  user?: UserInfo;
-}
-
-interface UserInfo {
-  email: string;
+  user?: { email: string };
 }
 
 const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const handleLogoutClick = (): void => {
-    setMenuOpen(false);
+  const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = () => {
     onLogout();
+    navigate('/login');
   };
 
   return (
     <header className="client-header">
-      <div className="container">
-        <nav className="client-nav">
-          <div className="logo">
-            <h1>Kealabs</h1>
-          </div>
-          
-          <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+      <div className="header-container">
+        <div className="header-logo">
+          <h1>Kealabs</h1>
+          <span className="logo-subtitle">Área do Cliente</span>
+        </div>
 
-          <ul className={`client-nav-menu ${menuOpen ? 'active' : ''}`}>
-            <li><a href="/">Voltar ao Site</a></li>
-            <li><a href="#dashboard" onClick={() => setMenuOpen(false)}>Dashboard</a></li>
-            <li><a href="#projetos" onClick={() => setMenuOpen(false)}>Projetos</a></li>
-            <li><a href="#suporte" onClick={() => setMenuOpen(false)}>Suporte</a></li>
-            <li className="nav-user">
-              <span className="user-email">{user?.email}</span>
-              <button className="btn-logout" onClick={handleLogoutClick}>Sair</button>
-            </li>
-          </ul>
+        <nav className="header-nav">
+          <a
+            href="/app/dashboard"
+            className={`nav-link ${isActive('/app/dashboard') || isActive('/app/') ? 'active' : ''}`}
+          >
+            Dashboard
+          </a>
+          <a
+            href="/app/builder"
+            className={`nav-link ${isActive('/app/builder') ? 'active' : ''}`}
+          >
+            Novo Orçamento
+          </a>
         </nav>
+
+        <div className="header-user">
+          <span className="user-email">{user?.email}</span>
+          <button onClick={handleLogout} className="logout-btn">
+            Sair
+          </button>
+        </div>
       </div>
     </header>
   );
