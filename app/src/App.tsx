@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import './styles/global.css';
 import Login from './components/Login';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import Builder from './pages/Builder';
 
-interface UserData {
-  email: string;
-}
+interface UserData { email: string; }
 
 const routeMap: Record<string, string> = {
-  gestao:     '/',
-  orcamentos: '/builder',
-  prospect:   '/',
-  'agent-kea': '/',
+  gestao:      '/dashboard',
+  orcamentos:  '/builder',
+  prospect:    '/dashboard',
+  'agent-kea': '/dashboard',
 };
 
 const AppLayout: React.FC<{ user: UserData | null; onLogout: () => void }> = ({ user, onLogout }) => {
@@ -23,7 +20,7 @@ const AppLayout: React.FC<{ user: UserData | null; onLogout: () => void }> = ({ 
 
   const handleNavigate = (item: string) => {
     setActiveItem(item);
-    navigate(routeMap[item] ?? '/');
+    navigate(routeMap[item] ?? '/dashboard');
   };
 
   return (
@@ -31,7 +28,6 @@ const AppLayout: React.FC<{ user: UserData | null; onLogout: () => void }> = ({ 
       <Sidebar activeItem={activeItem} onNavigate={handleNavigate} />
 
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top bar */}
         <header className="h-14 bg-white border-b border-[#E2E8F0] flex items-center justify-between px-6 flex-shrink-0">
           <p className="text-sm text-[#64748B]">
             Bem-vindo, <span className="font-semibold text-[#0A2540]">{user?.email}</span>
@@ -46,10 +42,9 @@ const AppLayout: React.FC<{ user: UserData | null; onLogout: () => void }> = ({ 
 
         <main className="flex-1 overflow-auto p-6">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/builder" element={<Builder />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </main>
       </div>
@@ -58,29 +53,34 @@ const AppLayout: React.FC<{ user: UserData | null; onLogout: () => void }> = ({ 
 };
 
 const App: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+  const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem('access_token')
   );
   const [user, setUser] = useState<UserData | null>(null);
 
-  const handleLogin = (userData: UserData): void => {
+  const handleLogin = (userData: UserData) => {
     setUser(userData);
     setIsAuthenticated(true);
   };
 
-  const handleLogout = (): void => {
+  const handleLogout = () => {
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('access_token');
   };
 
-  if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
-  }
-
   return (
-    <BrowserRouter>
-      <AppLayout user={user} onLogout={handleLogout} />
+    <BrowserRouter basename="/app">
+      <Routes>
+        <Route
+          path="/login"
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Login onLogin={handleLogin} />}
+        />
+        <Route
+          path="/*"
+          element={isAuthenticated ? <AppLayout user={user} onLogout={handleLogout} /> : <Navigate to="/login" replace />}
+        />
+      </Routes>
     </BrowserRouter>
   );
 };
