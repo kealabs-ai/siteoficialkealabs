@@ -2,9 +2,16 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './ClientHeader.css';
 
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 interface ClientHeaderProps {
   onLogout: () => void;
-  user?: { email: string };
+  user?: UserData;
 }
 
 const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
@@ -15,7 +22,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
 
   const handleLogout = () => {
     onLogout();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -28,21 +35,24 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
 
         <nav className="header-nav">
           <a
-            href="/app/dashboard"
-            className={`nav-link ${isActive('/app/dashboard') || isActive('/app/') ? 'active' : ''}`}
+            href="/dashboard"
+            className={`nav-link ${isActive('/dashboard') || isActive('/') ? 'active' : ''}`}
           >
             Dashboard
           </a>
           <a
-            href="/app/builder"
-            className={`nav-link ${isActive('/app/builder') ? 'active' : ''}`}
+            href="/builder"
+            className={`nav-link ${isActive('/builder') ? 'active' : ''}`}
           >
             Novo Orçamento
           </a>
         </nav>
 
         <div className="header-user">
-          <span className="user-email">{user?.email}</span>
+          <div className="user-info">
+            <span className="user-name">{user?.name || 'Usuário'}</span>
+            <span className="user-role">{user?.role || 'cliente'}</span>
+          </div>
           <button onClick={handleLogout} className="logout-btn">
             Sair
           </button>

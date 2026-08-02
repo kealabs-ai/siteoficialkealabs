@@ -15,12 +15,43 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // Se receber 401, limpar tokens
+    if (error.response?.status === 401) {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('token_expires_in');
+      localStorage.removeItem('token_type');
+      window.location.href = '/';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Types
 export type ServiceType = 'WEB' | 'BI' | 'MINI_SITE' | 'AI_AGENT';
 export type QuoteStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
 export type BISource = 'excel' | 'api' | 'database';
 export type HostingPlan = 'single' | 'premium' | 'business' | 'vps-starter' | 'vps-pro' | 'vps-ultra';
 export type AgentPlan = 'free' | 'starter' | 'pro' | 'enterprise';
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+export interface LoginResponse {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
+  user: User;
+}
 
 export interface Quote {
   id: string;
@@ -76,18 +107,39 @@ export interface CreateQuoteDTO {
   installment_value: number;
 }
 
-// API Endpoints
+// API Endpoints - Auth
+export const authApi = {
+  login: (email: string, password: string) =>
+    api.post<LoginResponse>('/auth/login', { email, password }),
+  validate: () =>
+    api.get('/auth/validate'),
+  logout: () =>
+    api.post('/auth/logout'),
+};
+
+// API Endpoints - Quotes
 export const quotesApi = {
   list: () => api.get<Quote[]>('/quotes'),
+  get: (id: string) => api.get<Quote>(`/quotes/${id}`),
   create: (body: CreateQuoteDTO) => api.post<Quote>('/quotes', body),
   updateStatus: (id: string, status: QuoteStatus) =>
     api.post('/quotes/update-status', { id, status }),
+  delete: (id: string) => api.post('/quotes/delete', { id }),
 };
 
+// API Endpoints - Settings
 export const settingsApi = {
   list: () => api.get<SystemSetting[]>('/settings'),
+  get: (key: string) => api.get<SystemSetting>(`/settings/${key}`),
 };
 
+// API Endpoints - Prospects
 export const prospectsApi = {
   list: () => api.get<Prospect[]>('/prospects'),
+  get: (id: string) => api.get<Prospect>(`/prospects/${id}`),
+  create: (body: Omit<Prospect, 'id' | 'created_at'>) =>
+    api.post<Prospect>('/prospects', body),
+  update: (id: string, body: Partial<Prospect>) =>
+    api.post<Prospect>(`/prospects/${id}`, body),
+  delete: (id: string) => api.post('/prospects/delete', { id }),
 };

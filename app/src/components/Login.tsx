@@ -7,12 +7,23 @@ interface LoginProps {
 }
 
 interface UserData {
+  id: string;
+  name: string;
   email: string;
+  role: string;
+}
+
+interface LoginResponse {
+  access_token: string;
+  refresh_token: string;
+  token_type: string;
+  expires_in: number;
+  user: UserData;
 }
 
 const Login: React.FC<LoginProps> = ({ onLogin }) => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('admin@kealabs.cloud');
+  const [password, setPassword] = useState<string>('123456');
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -28,16 +39,36 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     }
 
     try {
-      const response = await api.post<{ access_token: string; user: { email: string } }>(
-        '/auth/login',
-        { email, password }
-      );
-      
-      const { access_token } = response.data;
+      const response = await api.post<LoginResponse>('/auth/login', {
+        email,
+        password,
+      });
+
+      const { access_token, refresh_token, user, expires_in } = response.data;
+
+      // Armazenar tokens
       localStorage.setItem('access_token', access_token);
-      onLogin({ email });
+      localStorage.setItem('refresh_token', refresh_token);
+      localStorage.setItem('token_expires_in', expires_in.toString());
+      localStorage.setItem('token_type', 'bearer');
+
+      // Armazenar informações do usuário
+      localStorage.setItem('user', JSON.stringify(user));
+
+      // Chamar callback com dados do usuário
+      onLogin({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      });
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Erro ao fazer login. Tente novamente.');
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        'Erro ao fazer login. Verifique suas credenciais.';
+      setError(message);
+      console.error('Erro de autenticação:', err);
     } finally {
       setLoading(false);
     }
@@ -69,6 +100,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               onChange={handleEmailChange}
               placeholder="seu@email.com"
               disabled={loading}
+              required
             />
           </div>
 
@@ -81,6 +113,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               onChange={handlePasswordChange}
               placeholder="••••••••"
               disabled={loading}
+              required
             />
           </div>
 
