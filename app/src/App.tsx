@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './styles/global.css';
 import { api } from './lib/api';
 import Login from './components/Login';
@@ -17,7 +17,6 @@ interface UserData {
 // Validar se o token é válido
 const validateToken = async (token: string): Promise<boolean> => {
   try {
-    // Tenta fazer uma requisição para validar o token
     const response = await api.get('/auth/validate', {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -35,10 +34,32 @@ const validateToken = async (token: string): Promise<boolean> => {
   }
 };
 
-const App: React.FC = () => {
+// Componente de Layout Privado
+const PrivateLayout: React.FC<{
+  user: UserData | null;
+  onLogout: () => void;
+}> = ({ user, onLogout }) => {
+  return (
+    <div className="App">
+      <ClientHeader onLogout={onLogout} user={user || undefined} />
+      <main className="client-main">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/builder" element={<Builder />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
+    </div>
+  );
+};
+
+// Componente Principal
+const AppContent: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<UserData | null>(null);
   const [isValidating, setIsValidating] = useState(true);
+  const location = useLocation();
 
   // Validar token ao carregar
   useEffect(() => {
@@ -67,11 +88,13 @@ const App: React.FC = () => {
   }, []);
 
   const handleLogin = (userData: UserData): void => {
+    console.log('Login bem-sucedido:', userData);
     setUser(userData);
     setIsAuthenticated(true);
   };
 
   const handleLogout = (): void => {
+    console.log('Logout realizado');
     setUser(null);
     setIsAuthenticated(false);
     localStorage.removeItem('access_token');
@@ -103,19 +126,14 @@ const App: React.FC = () => {
     return <Login onLogin={handleLogin} />;
   }
 
+  return <PrivateLayout user={user} onLogout={handleLogout} />;
+};
+
+// Componente App com BrowserRouter
+const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <div className="App">
-        <ClientHeader onLogout={handleLogout} user={user || undefined} />
-        <main className="client-main">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/builder" element={<Builder />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </main>
-      </div>
+    <BrowserRouter basename="/app">
+      <AppContent />
     </BrowserRouter>
   );
 };

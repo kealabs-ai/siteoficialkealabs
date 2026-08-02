@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
 import './ClientHeader.css';
 
 interface UserData {
@@ -18,7 +18,10 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    return location.pathname === path || 
+           (path === '/' && (location.pathname === '/' || location.pathname === '/dashboard'));
+  };
 
   const handleLogout = () => {
     onLogout();
@@ -34,18 +37,18 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
         </div>
 
         <nav className="header-nav">
-          <a
-            href="/dashboard"
-            className={`nav-link ${isActive('/dashboard') || isActive('/') ? 'active' : ''}`}
+          <Link
+            to="/"
+            className={`nav-link ${isActive('/') || isActive('/dashboard') ? 'active' : ''}`}
           >
             Dashboard
-          </a>
-          <a
-            href="/builder"
+          </Link>
+          <Link
+            to="/builder"
             className={`nav-link ${isActive('/builder') ? 'active' : ''}`}
           >
             Novo Orçamento
-          </a>
+          </Link>
         </nav>
 
         <div className="header-user">
