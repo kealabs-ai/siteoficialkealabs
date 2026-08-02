@@ -32,19 +32,36 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     setError('');
     setLoading(true);
 
+    // Validação básica
     if (!email || !password) {
       setError('Por favor, preencha todos os campos');
       setLoading(false);
       return;
     }
 
+    if (!email.includes('@')) {
+      setError('Por favor, insira um email válido');
+      setLoading(false);
+      return;
+    }
+
     try {
+      console.log('Iniciando login com:', { email });
+      
+      // Fazer requisição de login
       const response = await api.post<LoginResponse>('/auth/login', {
-        email,
-        password,
+        email: email.trim(),
+        password: password.trim(),
       });
 
+      console.log('Resposta do login:', response.data);
+
       const { access_token, refresh_token, user, expires_in } = response.data;
+
+      // Validar resposta
+      if (!access_token || !user) {
+        throw new Error('Resposta inválida do servidor');
+      }
 
       // Armazenar tokens
       localStorage.setItem('access_token', access_token);
@@ -55,6 +72,8 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       // Armazenar informações do usuário
       localStorage.setItem('user', JSON.stringify(user));
 
+      console.log('Login bem-sucedido para:', user.email);
+
       // Chamar callback com dados do usuário
       onLogin({
         id: user.id,
@@ -63,12 +82,25 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
         role: user.role,
       });
     } catch (err: any) {
-      const message =
-        err.response?.data?.message ||
-        err.response?.data?.error ||
-        'Erro ao fazer login. Verifique suas credenciais.';
+      console.error('Erro completo:', err);
+      
+      let message = 'Erro ao fazer login. Tente novamente.';
+
+      if (err.response?.status === 401) {
+        message = 'Email ou senha incorretos';
+      } else if (err.response?.status === 400) {
+        message = err.response?.data?.message || 'Dados inválidos';
+      } else if (err.response?.status === 500) {
+        message = 'Erro no servidor. Tente novamente mais tarde.';
+      } else if (err.message === 'Network Error') {
+        message = 'Erro de conexão. Verifique sua internet.';
+      } else if (err.response?.data?.message) {
+        message = err.response.data.message;
+      } else if (err.response?.data?.error) {
+        message = err.response.data.error;
+      }
+
       setError(message);
-      console.error('Erro de autenticação:', err);
     } finally {
       setLoading(false);
     }
@@ -101,6 +133,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               placeholder="seu@email.com"
               disabled={loading}
               required
+              autoComplete="email"
             />
           </div>
 
@@ -114,14 +147,26 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
               placeholder="••••••••"
               disabled={loading}
               required
+              autoComplete="current-password"
             />
           </div>
 
-          {error && <div className="error-message">{error}</div>}
+          {error && (
+            <div className="error-message" role="alert">
+              ⚠️ {error}
+            </div>
+          )}
 
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? 'Entrando...' : 'Entrar'}
           </button>
+
+          {/* Informações de teste */}
+          <div className="login-info">
+            <p>Credenciais de teste:</p>
+            <small>Email: admin@kealabs.cloud</small>
+            <small>Senha: 123456</small>
+          </div>
         </form>
 
         <div className="login-footer">

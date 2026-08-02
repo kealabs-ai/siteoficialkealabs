@@ -105,6 +105,31 @@
   cursor: not-allowed;
 }
 
+.login-info {
+  background-color: #F0FDF4;
+  border: 1px solid #BBFCE7;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 10px;
+}
+
+.login-info p {
+  color: #166534;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.login-info small {
+  display: block;
+  color: #15803D;
+  font-size: 13px;
+  margin: 4px 0;
+  font-family: 'Courier New', monospace;
+}
+
 .login-footer {
   text-align: center;
   margin-top: 24px;
@@ -134,5 +159,13 @@
 
   .login-header h1 {
     font-size: 28px;
+  }
+
+  .login-info {
+    font-size: 12px;
+  }
+
+  .login-info small {
+    font-size: 11px;
   }
 }

@@ -7,14 +7,22 @@ export const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
+// Interceptador de requisição - adiciona token apenas se existir
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('access_token');
+  
+  // Não adicionar token em requisições de login
+  if (config.url?.includes('/auth/login')) {
+    return config;
+  }
+  
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
+// Interceptador de resposta - trata erros
 api.interceptors.response.use(
   (response) => response,
   (error) => {
