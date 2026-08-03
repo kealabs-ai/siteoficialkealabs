@@ -16,7 +16,7 @@ export const getAuthErrorMessage = (error: unknown): string => {
   const candidate = error as { response?: { status?: number; data?: { message?: string; error?: string; detail?: string } }; message?: string };
 
   if (candidate.response?.status === 401) {
-    return 'Email ou senha incorretos';
+    return 'Usuário ou senha invalido!';
   }
 
   if (candidate.response?.status === 400) {
