@@ -12,6 +12,7 @@ const ClientApp = () => {
   const handleLogin = (userData) => {
     setUser(userData);
     setIsAuthenticated(true);
+    navigate('/app');
   };
 
   const handleLogout = () => {
