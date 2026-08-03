@@ -1,0 +1,119 @@
+.owner-header {
+  background-color: #0A2540;
+  color: white;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.owner-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.owner-nav .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.owner-nav .logo h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.owner-nav .badge {
+  background-color: #10B981;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.owner-nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+  align-items: center;
+}
+
+.owner-nav-menu a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.owner-nav-menu a:hover {
+  color: #10B981;
+}
+
+.owner-nav-menu .btn-voltar {
+  background-color: #FF6B00;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.owner-nav-menu .btn-voltar:hover {
+  background-color: #E55A00;
+  color: white;
+}
+
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .owner-nav-menu {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: #0A2540;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+
+  .owner-nav-menu.active {
+    max-height: 400px;
+  }
+
+  .owner-nav-menu a {
+    display: block;
+    padding: 0.5rem 0;
+  }
+
+  .owner-nav-menu .btn-voltar {
+    width: 100%;
+    text-align: center;
+  }
+}
