@@ -1,5 +1,6 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { api } from '../lib/api';
+import { normalizeUserData } from '../lib/authValidation';
 import './Login.css';
 
 interface LoginProps {
@@ -58,8 +59,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
       const { access_token, refresh_token, user, expires_in } = response.data;
 
+      const normalizedUser = normalizeUserData(user);
+
       // Validar resposta
-      if (!access_token || !user) {
+      if (!access_token || !normalizedUser) {
         throw new Error('Resposta inválida do servidor');
       }
 
@@ -72,15 +75,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       // Armazenar informações do usuário
       localStorage.setItem('user', JSON.stringify(user));
 
-      console.log('Login bem-sucedido para:', user.email);
+      console.log('Login bem-sucedido para:', normalizedUser.email);
 
       // Chamar callback com dados do usuário
-      onLogin({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      });
+      onLogin(normalizedUser);
     } catch (err: any) {
       console.error('Erro completo:', err);
       

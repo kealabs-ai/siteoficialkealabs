@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './styles/global.css';
 import { api } from './lib/api';
+import { normalizeUserData } from './lib/authValidation';
 import Login from './components/Login';
 import ClientHeader from './components/ClientHeader';
 import Dashboard from './pages/Dashboard';
@@ -69,12 +70,19 @@ const AppContent: React.FC = () => {
     if (token && storedUser) {
       validateToken(token)
         .then((isValid) => {
-          if (isValid) {
+          const parsedUser = normalizeUserData(JSON.parse(storedUser));
+
+          if (isValid && parsedUser) {
             setIsAuthenticated(true);
-            setUser(JSON.parse(storedUser));
+            setUser(parsedUser);
           } else {
             setIsAuthenticated(false);
             setUser(null);
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('token_expires_in');
+            localStorage.removeItem('token_type');
           }
         })
         .catch(() => {
