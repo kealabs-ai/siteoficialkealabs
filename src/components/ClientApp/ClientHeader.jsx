@@ -27,7 +27,7 @@ const ClientHeader = ({ onLogout, user }) => {
             <li><a href="/">Voltar ao Site</a></li>
             <li><a href="#dashboard" onClick={() => setMenuOpen(false)}>Dashboard</a></li>
             <li><a href="#projetos" onClick={() => setMenuOpen(false)}>Projetos</a></li>
-            <li><a href="#suporte" onClick={() => setMenuOpen(false)}>Suporte</a></li>
+            <li><a href="#suporte" onClick={() => setMenuOpen(false)}>aSup</a></li>
             <li className="nav-user">
               <span className="user-email">{user?.email}</span>
               <button className="btn-logout" onClick={handleLogoutClick}>Sair</button>
