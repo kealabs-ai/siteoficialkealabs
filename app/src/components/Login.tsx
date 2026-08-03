@@ -53,8 +53,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       const enteredEmail = email.trim().toLowerCase();
 
       if (!accessToken || !normalizedUser || normalizedUser.email !== enteredEmail) {
-        const serverMessage = payload.message || payload.error || payload.detail || 'Resposta inválida do servidor';
-        throw new Error(serverMessage);
+        throw new Error('Usuário ou senha invalido!');
       }
 
       localStorage.setItem('access_token', accessToken);
@@ -65,7 +64,6 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
       console.log('Login bem-sucedido para:', normalizedUser.email);
 
-      // Chamar callback com dados do usuário
       onLogin(normalizedUser);
     } catch (err: any) {
       console.error('Erro completo:', err);

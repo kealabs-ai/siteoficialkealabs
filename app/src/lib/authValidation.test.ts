@@ -3,7 +3,7 @@ import { normalizeUserData, getAuthErrorMessage } from './authValidation';
 
 describe('getAuthErrorMessage', () => {
   it('maps 401 responses to the expected message', () => {
-    expect(getAuthErrorMessage({ response: { status: 401, data: { message: 'Falha' } } })).toBe('Email ou senha incorretos');
+    expect(getAuthErrorMessage({ response: { status: 401, data: { message: 'Falha' } } })).toBe('Usuário ou senha invalido!');
   });
 
   it('preserves server-provided error details', () => {
