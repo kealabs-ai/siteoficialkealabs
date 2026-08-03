@@ -1,5 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeUserData } from './authValidation';
+import { normalizeUserData, validateCredentials } from './authValidation';
+
+describe('validateCredentials', () => {
+  it('rejects invalid credentials', () => {
+    expect(validateCredentials('admin@kealabs.cloud', 'wrong-password')).toEqual({
+      valid: false,
+      error: 'Email ou senha incorretos',
+    });
+  });
+
+  it('accepts the expected demo credentials', () => {
+    expect(validateCredentials('admin@kealabs.cloud', '123456')).toEqual({ valid: true });
+  });
+});
 
 describe('normalizeUserData', () => {
   it('rejects malformed user payloads', () => {

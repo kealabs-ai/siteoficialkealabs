@@ -1,6 +1,6 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { api } from '../lib/api';
-import { normalizeUserData } from '../lib/authValidation';
+import { normalizeUserData, validateCredentials } from '../lib/authValidation';
 import './Login.css';
 
 interface LoginProps {
@@ -33,15 +33,10 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     setError('');
     setLoading(true);
 
-    // Validação básica
-    if (!email || !password) {
-      setError('Por favor, preencha todos os campos');
-      setLoading(false);
-      return;
-    }
+    const credentialValidation = validateCredentials(email, password);
 
-    if (!email.includes('@')) {
-      setError('Por favor, insira um email válido');
+    if (!credentialValidation.valid) {
+      setError(credentialValidation.error || 'Email ou senha incorretos');
       setLoading(false);
       return;
     }
@@ -62,7 +57,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       const normalizedUser = normalizeUserData(user);
 
       // Validar resposta
-      if (!access_token || !normalizedUser) {
+      if (!access_token || !normalizedUser || normalizedUser.email !== email.trim().toLowerCase()) {
         throw new Error('Resposta inválida do servidor');
       }
 
