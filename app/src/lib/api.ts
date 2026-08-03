@@ -26,14 +26,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // Se receber 401, limpar tokens
-    if (error.response?.status === 401) {
+    const isAuthEndpoint = error.config?.url?.includes('/auth/login') || error.config?.url?.includes('/auth/validate');
+
+    if (error.response?.status === 401 && !isAuthEndpoint) {
       localStorage.removeItem('access_token');
       localStorage.removeItem('refresh_token');
       localStorage.removeItem('user');
       localStorage.removeItem('token_expires_in');
       localStorage.removeItem('token_type');
-      window.location.href = '/';
+      window.location.assign('/app');
     }
     return Promise.reject(error);
   }
