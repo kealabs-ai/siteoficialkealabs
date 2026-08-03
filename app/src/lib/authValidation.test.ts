@@ -1,16 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeUserData, validateCredentials } from './authValidation';
+import { normalizeUserData, getAuthErrorMessage } from './authValidation';
 
-describe('validateCredentials', () => {
-  it('rejects invalid credentials', () => {
-    expect(validateCredentials('admin@kealabs.cloud', 'wrong-password')).toEqual({
-      valid: false,
-      error: 'Email ou senha incorretos',
-    });
+describe('getAuthErrorMessage', () => {
+  it('maps 401 responses to the expected message', () => {
+    expect(getAuthErrorMessage({ response: { status: 401, data: { message: 'Falha' } } })).toBe('Email ou senha incorretos');
   });
 
-  it('accepts the expected demo credentials', () => {
-    expect(validateCredentials('admin@kealabs.cloud', '123456')).toEqual({ valid: true });
+  it('preserves server-provided error details', () => {
+    expect(getAuthErrorMessage({ response: { status: 400, data: { message: 'Dados inválidos' } } })).toBe('Dados inválidos');
   });
 });
 

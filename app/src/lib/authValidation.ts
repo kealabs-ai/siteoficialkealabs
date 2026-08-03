@@ -5,34 +5,49 @@ export interface AuthUserData {
   role: string;
 }
 
-const DEMO_CREDENTIALS: Array<{ email: string; password: string }> = [
-  { email: 'admin@kealabs.cloud', password: '123456' },
-];
-
 const isNonEmptyString = (value: unknown): value is string =>
   typeof value === 'string' && value.trim().length > 0;
 
-export const validateCredentials = (email: string, password: string): { valid: boolean; error?: string } => {
-  const normalizedEmail = email.trim().toLowerCase();
-  const normalizedPassword = password.trim();
-
-  if (!normalizedEmail || !normalizedPassword) {
-    return { valid: false, error: 'Por favor, preencha todos os campos' };
+export const getAuthErrorMessage = (error: unknown): string => {
+  if (typeof error === 'string') {
+    return error;
   }
 
-  if (!normalizedEmail.includes('@') || normalizedEmail.split('@').length !== 2 || normalizedEmail.startsWith('@') || normalizedEmail.endsWith('@')) {
-    return { valid: false, error: 'Por favor, insira um email válido' };
+  const candidate = error as { response?: { status?: number; data?: { message?: string; error?: string; detail?: string } }; message?: string };
+
+  if (candidate.response?.status === 401) {
+    return 'Email ou senha incorretos';
   }
 
-  const isKnownCredential = DEMO_CREDENTIALS.some(
-    (credential) => credential.email === normalizedEmail && credential.password === normalizedPassword,
-  );
-
-  if (!isKnownCredential) {
-    return { valid: false, error: 'Email ou senha incorretos' };
+  if (candidate.response?.status === 400) {
+    return candidate.response?.data?.message || candidate.response?.data?.error || candidate.response?.data?.detail || 'Dados inválidos';
   }
 
-  return { valid: true };
+  if (candidate.response?.status === 500) {
+    return 'Erro no servidor. Tente novamente mais tarde.';
+  }
+
+  if (candidate.message === 'Network Error') {
+    return 'Erro de conexão. Verifique sua internet.';
+  }
+
+  if (candidate.response?.data?.message) {
+    return candidate.response.data.message;
+  }
+
+  if (candidate.response?.data?.error) {
+    return candidate.response.data.error;
+  }
+
+  if (candidate.response?.data?.detail) {
+    return candidate.response.data.detail;
+  }
+
+  if (candidate.message) {
+    return candidate.message;
+  }
+
+  return 'Erro ao fazer login. Tente novamente.';
 };
 
 export const normalizeUserData = (user: unknown): AuthUserData | null => {

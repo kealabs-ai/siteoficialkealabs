@@ -1,6 +1,6 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import { api } from '../lib/api';
-import { normalizeUserData, validateCredentials } from '../lib/authValidation';
+import { normalizeUserData, getAuthErrorMessage } from '../lib/authValidation';
 import './Login.css';
 
 interface LoginProps {
@@ -33,18 +33,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
     setError('');
     setLoading(true);
 
-    const credentialValidation = validateCredentials(email, password);
-
-    if (!credentialValidation.valid) {
-      setError(credentialValidation.error || 'Email ou senha incorretos');
-      setLoading(false);
-      return;
-    }
-
     try {
       console.log('Iniciando login com:', { email });
-      
-      // Fazer requisição de login
+
       const response = await api.post<LoginResponse>('/auth/login', {
         email: email.trim(),
         password: password.trim(),
@@ -52,23 +43,24 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
 
       console.log('Resposta do login:', response.data);
 
-      const { access_token, refresh_token, user, expires_in } = response.data;
+      const payload = response.data ?? {};
+      const accessToken = payload.access_token || payload.accessToken || payload.token;
+      const refreshToken = payload.refresh_token || payload.refreshToken;
+      const expiresIn = payload.expires_in ?? payload.expiresIn;
+      const user = payload.user ?? payload.profile ?? payload.data?.user ?? null;
 
       const normalizedUser = normalizeUserData(user);
 
-      // Validar resposta
-      if (!access_token || !normalizedUser || normalizedUser.email !== email.trim().toLowerCase()) {
-        throw new Error('Resposta inválida do servidor');
+      if (!accessToken || !normalizedUser) {
+        const serverMessage = payload.message || payload.error || payload.detail || 'Resposta inválida do servidor';
+        throw new Error(serverMessage);
       }
 
-      // Armazenar tokens
-      localStorage.setItem('access_token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
-      localStorage.setItem('token_expires_in', expires_in.toString());
+      localStorage.setItem('access_token', accessToken);
+      localStorage.setItem('refresh_token', refreshToken || '');
+      localStorage.setItem('token_expires_in', String(expiresIn ?? ''));
       localStorage.setItem('token_type', 'bearer');
-
-      // Armazenar informações do usuário
-      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('user', JSON.stringify(normalizedUser));
 
       console.log('Login bem-sucedido para:', normalizedUser.email);
 
@@ -76,24 +68,7 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       onLogin(normalizedUser);
     } catch (err: any) {
       console.error('Erro completo:', err);
-      
-      let message = 'Erro ao fazer login. Tente novamente.';
-
-      if (err.response?.status === 401) {
-        message = 'Email ou senha incorretos';
-      } else if (err.response?.status === 400) {
-        message = err.response?.data?.message || 'Dados inválidos';
-      } else if (err.response?.status === 500) {
-        message = 'Erro no servidor. Tente novamente mais tarde.';
-      } else if (err.message === 'Network Error') {
-        message = 'Erro de conexão. Verifique sua internet.';
-      } else if (err.response?.data?.message) {
-        message = err.response.data.message;
-      } else if (err.response?.data?.error) {
-        message = err.response.data.error;
-      }
-
-      setError(message);
+      setError(getAuthErrorMessage(err));
     } finally {
       setLoading(false);
     }
