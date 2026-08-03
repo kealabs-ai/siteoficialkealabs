@@ -70,7 +70,13 @@ const AppContent: React.FC = () => {
     if (token && storedUser) {
       validateToken(token)
         .then((isValid) => {
-          const parsedUser = normalizeUserData(JSON.parse(storedUser));
+          let parsedUser: UserData | null = null;
+
+          try {
+            parsedUser = normalizeUserData(JSON.parse(storedUser));
+          } catch {
+            parsedUser = null;
+          }
 
           if (isValid && parsedUser) {
             setIsAuthenticated(true);
@@ -96,8 +102,21 @@ const AppContent: React.FC = () => {
   }, []);
 
   const handleLogin = (userData: UserData): void => {
-    console.log('Login bem-sucedido:', userData);
-    setUser(userData);
+    const normalizedUser = normalizeUserData(userData);
+
+    if (!normalizedUser) {
+      setUser(null);
+      setIsAuthenticated(false);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('token_expires_in');
+      localStorage.removeItem('token_type');
+      return;
+    }
+
+    console.log('Login bem-sucedido:', normalizedUser);
+    setUser(normalizedUser);
     setIsAuthenticated(true);
   };
 

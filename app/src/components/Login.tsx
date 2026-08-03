@@ -50,8 +50,9 @@ const Login: React.FC<LoginProps> = ({ onLogin }) => {
       const user = payload.user ?? payload.profile ?? payload.data?.user ?? null;
 
       const normalizedUser = normalizeUserData(user);
+      const enteredEmail = email.trim().toLowerCase();
 
-      if (!accessToken || !normalizedUser) {
+      if (!accessToken || !normalizedUser || normalizedUser.email !== enteredEmail) {
         const serverMessage = payload.message || payload.error || payload.detail || 'Resposta inválida do servidor';
         throw new Error(serverMessage);
       }
