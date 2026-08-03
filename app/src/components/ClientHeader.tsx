@@ -25,7 +25,7 @@ const ClientHeader: React.FC<ClientHeaderProps> = ({ onLogout, user }) => {
 
   const handleLogout = () => {
     onLogout();
-    navigate('/');
+    navigate('/login');
   };
 
   return (

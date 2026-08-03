@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './styles/global.css';
 import { api } from './lib/api';
 import { normalizeUserData } from './lib/authValidation';
@@ -48,7 +48,8 @@ const PrivateLayout: React.FC<{
           <Route path="/" element={<Dashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/builder" element={<Builder />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/login" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </main>
     </div>
@@ -60,7 +61,6 @@ const AppContent: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<UserData | null>(null);
   const [isValidating, setIsValidating] = useState(true);
-  const location = useLocation();
 
   // Validar token ao carregar
   useEffect(() => {
@@ -150,7 +150,15 @@ const AppContent: React.FC = () => {
   }
 
   if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
+    return (
+      <Routes>
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route path="/" element={<Login onLogin={handleLogin} />} />
+        <Route path="/dashboard" element={<Navigate to="/login" replace />} />
+        <Route path="/builder" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    );
   }
 
   return <PrivateLayout user={user} onLogout={handleLogout} />;
