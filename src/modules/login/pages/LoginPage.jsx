@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getCurrentUser } from '../../services/authService';
 import LoginForm from '../components/LoginForm';
 import LoginBenefits from '../components/LoginBenefits';
 import '../styles/login.css';
@@ -11,19 +12,20 @@ const LoginPage = () => {
   const handleLogin = async (credentials) => {
     setIsLoading(true);
     try {
-      // Simular chamada à API
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      // Obter dados do usuário logado
+      const user = await getCurrentUser();
+
       // Armazenar dados do usuário
-      localStorage.setItem('user', JSON.stringify({
-        email: credentials.email,
-        token: 'fake-token-' + Date.now()
-      }));
+      localStorage.setItem('user', JSON.stringify(user));
 
       // Redirecionar para dashboard
       navigate('/dashboard');
     } catch (error) {
-      console.error('Erro ao fazer login:', error);
+      console.error('Erro ao obter dados do usuário:', error);
+      // Mesmo com erro ao obter dados, redirecionar se o token foi salvo
+      if (localStorage.getItem('auth_token')) {
+        navigate('/dashboard');
+      }
     } finally {
       setIsLoading(false);
     }

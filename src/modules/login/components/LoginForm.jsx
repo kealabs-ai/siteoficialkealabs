@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+import { login } from '../../services/authService';
 
-const LoginForm = ({ onSubmit, isLoading }) => {
+const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
+    // Validações
     if (!email || !password) {
       setError('Por favor, preencha todos os campos');
       return;
@@ -26,8 +29,39 @@ const LoginForm = ({ onSubmit, isLoading }) => {
       return;
     }
 
-    onSubmit({ email, password });
+    setIsLoading(true);
+
+    try {
+      // Chamar endpoint de login
+      const response = await login(email, password);
+
+      // Se "Lembrar-me" está marcado, armazenar email
+      if (rememberMe) {
+        localStorage.setItem('remembered_email', email);
+      } else {
+        localStorage.removeItem('remembered_email');
+      }
+
+      // Chamar callback com sucesso
+      onSubmit({ email, password, ...response });
+    } catch (err) {
+      setError(err.message || 'Erro ao fazer login. Tente novamente.');
+      console.error('Erro no login:', err);
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  // Carregar email lembrado ao montar o componente
+  React.useEffect(() => {
+    const rememberedEmail = localStorage.getItem('remembered_email');
+    if (rememberedEmail) {
+      setEmail(rememberedEmail);
+      setRememberMe(true);
+    }
+  }, []);
+
+  const isSubmitting = isLoading || externalIsLoading;
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
@@ -47,8 +81,9 @@ const LoginForm = ({ onSubmit, isLoading }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="seu@email.com"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className="form-input"
+              autoComplete="email"
             />
           </div>
         </div>
@@ -63,17 +98,18 @@ const LoginForm = ({ onSubmit, isLoading }) => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className="form-input"
+              autoComplete="current-password"
             />
             <button
               type="button"
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
-              disabled={isLoading}
+              disabled={isSubmitting}
               title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
-              {showPassword ? '👁️' : '👁️‍🗨️'}
+              {showPassword ? '👁️' : '👁️🗨️'}
             </button>
           </div>
         </div>
@@ -84,7 +120,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              disabled={isLoading}
+              disabled={isSubmitting}
             />
             <span>Lembrar-me neste dispositivo</span>
           </label>
@@ -101,9 +137,9 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         <button
           type="submit"
           className="login-button"
-          disabled={isLoading}
+          disabled={isSubmitting}
         >
-          {isLoading ? (
+          {isSubmitting ? (
             <>
               <span className="spinner"></span>
               Entrando...
@@ -121,10 +157,10 @@ const LoginForm = ({ onSubmit, isLoading }) => {
         </div>
 
         <div className="social-login">
-          <button type="button" className="social-button google" disabled={isLoading}>
+          <button type="button" className="social-button google" disabled={isSubmitting}>
             <span>Google</span>
           </button>
-          <button type="button" className="social-button microsoft" disabled={isLoading}>
+          <button type="button" className="social-button microsoft" disabled={isSubmitting}>
             <span>Microsoft</span>
           </button>
         </div>
