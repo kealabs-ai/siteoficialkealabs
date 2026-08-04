@@ -6,14 +6,12 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Validações
     if (!email || !password) {
       setError('Por favor, preencha todos os campos');
       return;
@@ -32,17 +30,14 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
     setIsLoading(true);
 
     try {
-      // Chamar endpoint de login
       const response = await login(email, password);
 
-      // Se "Lembrar-me" está marcado, armazenar email
       if (rememberMe) {
         localStorage.setItem('remembered_email', email);
       } else {
         localStorage.removeItem('remembered_email');
       }
 
-      // Chamar callback com sucesso
       onSubmit({ email, password, ...response });
     } catch (err) {
       setError(err.message || 'Erro ao fazer login. Tente novamente.');
@@ -52,7 +47,8 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
     }
   };
 
-  // Carregar email lembrado ao montar o componente
+  const [rememberMe, setRememberMe] = useState(false);
+
   React.useEffect(() => {
     const rememberedEmail = localStorage.getItem('remembered_email');
     if (rememberedEmail) {
@@ -65,15 +61,16 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <div className="form-header">
-        <h2>Bem-vindo de volta</h2>
-        <p>Acesse sua conta para continuar</p>
+      <div className="form-title">
+        <h2>Bem-vindo</h2>
+        <p>Acesse sua conta Kealabs</p>
       </div>
 
-      <div className="form-content">
+      <div className="form-fields">
+        {/* Campo Email */}
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <div className="input-wrapper">
+          <div className="input-field">
             <span className="input-icon">✉️</span>
             <input
               type="email"
@@ -88,9 +85,10 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
           </div>
         </div>
 
+        {/* Campo Senha */}
         <div className="form-group">
           <label htmlFor="password">Senha</label>
-          <div className="input-wrapper">
+          <div className="input-field">
             <span className="input-icon">🔒</span>
             <input
               type={showPassword ? 'text' : 'password'}
@@ -109,13 +107,14 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
               disabled={isSubmitting}
               title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
-              {showPassword ? '👁️' : '👁️🗨️'}
+              {showPassword ? '👁️' : '👁️‍🗨️'}
             </button>
           </div>
         </div>
 
+        {/* Checkbox Lembrar-me */}
         <div className="form-options">
-          <label className="remember-me">
+          <label className="checkbox-label">
             <input
               type="checkbox"
               checked={rememberMe}
@@ -124,16 +123,18 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
             />
             <span>Lembrar-me neste dispositivo</span>
           </label>
-          <a href="#forgot" className="forgot-password">Esqueceu a senha?</a>
+          <a href="#forgot" className="forgot-link">Esqueceu a senha?</a>
         </div>
 
+        {/* Mensagem de Erro */}
         {error && (
-          <div className="error-message">
+          <div className="error-alert">
             <span className="error-icon">⚠️</span>
-            <span>{error}</span>
+            <span className="error-text">{error}</span>
           </div>
         )}
 
+        {/* Botão de Login */}
         <button
           type="submit"
           className="login-button"
@@ -142,30 +143,18 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
           {isSubmitting ? (
             <>
               <span className="spinner"></span>
-              Entrando...
+              <span>Entrando...</span>
             </>
           ) : (
             <>
-              <span>Entrar na Conta</span>
-              <span className="button-arrow">→</span>
+              <span>Entrar</span>
+              <span className="button-icon">→</span>
             </>
           )}
         </button>
-
-        <div className="form-divider">
-          <span>Ou continue com</span>
-        </div>
-
-        <div className="social-login">
-          <button type="button" className="social-button google" disabled={isSubmitting}>
-            <span>Google</span>
-          </button>
-          <button type="button" className="social-button microsoft" disabled={isSubmitting}>
-            <span>Microsoft</span>
-          </button>
-        </div>
       </div>
 
+      {/* Footer do Formulário */}
       <div className="form-footer">
         <p>Não tem uma conta? <a href="#signup" className="signup-link">Solicite acesso</a></p>
       </div>

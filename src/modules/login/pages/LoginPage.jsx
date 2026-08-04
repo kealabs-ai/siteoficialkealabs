@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser } from '../../../services/authService';
 import LoginForm from '../components/LoginForm';
-import LoginBenefits from '../components/LoginBenefits';
+import logo from '../../../assets/kealabs_logo_strategic.png';
 import '../styles/login.css';
 
 const LoginPage = () => {
@@ -12,17 +12,11 @@ const LoginPage = () => {
   const handleLogin = async (credentials) => {
     setIsLoading(true);
     try {
-      // Obter dados do usuário logado
       const user = await getCurrentUser();
-
-      // Armazenar dados do usuário
       localStorage.setItem('user', JSON.stringify(user));
-
-      // Redirecionar para dashboard
       navigate('/dashboard');
     } catch (error) {
       console.error('Erro ao obter dados do usuário:', error);
-      // Mesmo com erro ao obter dados, redirecionar se o token foi salvo
       if (localStorage.getItem('auth_token')) {
         navigate('/dashboard');
       }
@@ -33,12 +27,33 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <div className="login-wrapper">
-        <div className="login-left">
-          <LoginBenefits />
+      {/* Background com gradiente e elementos decorativos */}
+      <div className="login-background">
+        <div className="gradient-orb gradient-orb-1"></div>
+        <div className="gradient-orb gradient-orb-2"></div>
+        <div className="gradient-orb gradient-orb-3"></div>
+        <div className="grid-pattern"></div>
+      </div>
+
+      {/* Container principal */}
+      <div className="login-container">
+        {/* Header com logo */}
+        <div className="login-header">
+          <div className="logo-wrapper">
+            <img src={logo} alt="Kealabs" className="logo-image" />
+          </div>
+          <h1 className="brand-title">Kealabs</h1>
+          <p className="brand-subtitle">AI-First Intelligence Platform</p>
         </div>
-        <div className="login-right">
-          <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
+
+        {/* Formulário de login */}
+        <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
+
+        {/* Footer */}
+        <div className="login-footer">
+          <p className="footer-text">
+            Powered by <span className="ai-badge">🤖 AI</span>
+          </p>
         </div>
       </div>
     </div>
