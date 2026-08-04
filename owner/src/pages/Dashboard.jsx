@@ -7,6 +7,9 @@ const Dashboard = () => {
         <div className="dashboard-header">
           <h1>Painel do Proprietário</h1>
           <p>Bem-vindo ao painel administrativo Kealabs</p>
+          <div className="access-badge">
+            ✓ Você acessou com sucesso o Painel do Proprietário
+          </div>
         </div>
 
         <div className="dashboard-grid">
