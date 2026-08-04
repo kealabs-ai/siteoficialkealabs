@@ -26,27 +26,13 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-page">
-      {/* Background com gradiente e elementos decorativos */}
-      <div className="login-background">
-        <div className="gradient-orb gradient-orb-1"></div>
-        <div className="gradient-orb gradient-orb-2"></div>
-        <div className="gradient-orb gradient-orb-3"></div>
-        <div className="grid-pattern"></div>
-      </div>
-
-      {/* Container principal */}
-      <div className="login-container">
-        {/* Header com logo */}
+    <div className="login-container">
+      <div className="login-box">
         <div className="login-header">
-          <div className="logo-wrapper">
-            <img src={logo} alt="Kealabs" className="logo-image" />
-          </div>
-          <h1 className="brand-title">Kealabs</h1>
-          <p className="brand-subtitle">AI-First Intelligence Platform</p>
+          <img src={logo} alt="Kealabs" className="login-logo" />
+          <p>Área do Cliente</p>
         </div>
 
-        {/* Formulário de login */}
         <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
       </div>
     </div>
