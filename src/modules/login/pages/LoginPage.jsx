@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCurrentUser } from '../../services/authService';
+import { getCurrentUser } from '../../../services/authService';
 import LoginForm from '../components/LoginForm';
 import LoginBenefits from '../components/LoginBenefits';
 import '../styles/login.css';
