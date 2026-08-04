@@ -48,13 +48,6 @@ const LoginPage = () => {
 
         {/* Formulário de login */}
         <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
-
-        {/* Footer */}
-        <div className="login-footer">
-          <p className="footer-text">
-            Powered by <span className="ai-badge">🤖 AI</span>
-          </p>
-        </div>
       </div>
     </div>
   );

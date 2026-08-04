@@ -6,6 +6,7 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -47,8 +48,6 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
     }
   };
 
-  const [rememberMe, setRememberMe] = useState(false);
-
   React.useEffect(() => {
     const rememberedEmail = localStorage.getItem('remembered_email');
     if (rememberedEmail) {
@@ -60,103 +59,114 @@ const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
   const isSubmitting = isLoading || externalIsLoading;
 
   return (
-    <form className="login-form" onSubmit={handleSubmit}>
-      <div className="form-title">
-        <h2>Bem-vindo</h2>
-        <p>Acesse sua conta Kealabs</p>
+    <form 
+      className="w-full max-w-md backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl p-8 shadow-2xl animate-slideUp"
+      onSubmit={handleSubmit}
+    >
+      {/* Campo Email */}
+      <div className="mb-6">
+        <label htmlFor="email" className="block text-sm font-bold text-white uppercase tracking-wider mb-3">
+          Email
+        </label>
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg">✉️</span>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="seu@email.com"
+            disabled={isSubmitting}
+            className="w-full pl-12 pr-4 py-3 bg-white/20 border-2 border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:border-emerald-400 focus:bg-white/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            autoComplete="email"
+          />
+        </div>
       </div>
 
-      <div className="form-fields">
-        {/* Campo Email */}
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <div className="input-field">
-            <span className="input-icon">✉️</span>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="seu@email.com"
-              disabled={isSubmitting}
-              className="form-input"
-              autoComplete="email"
-            />
-          </div>
+      {/* Campo Senha */}
+      <div className="mb-6">
+        <label htmlFor="password" className="block text-sm font-bold text-white uppercase tracking-wider mb-3">
+          Senha
+        </label>
+        <div className="relative">
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg">🔒</span>
+          <input
+            type={showPassword ? 'text' : 'password'}
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="••••••••"
+            disabled={isSubmitting}
+            className="w-full pl-12 pr-12 py-3 bg-white/20 border-2 border-white/30 rounded-lg text-white placeholder-white/60 focus:outline-none focus:border-emerald-400 focus:bg-white/30 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            autoComplete="current-password"
+          />
+          <button
+            type="button"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-lg hover:scale-110 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={isSubmitting}
+            title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+          >
+            {showPassword ? '👁️' : '👁️🗨️'}
+          </button>
         </div>
+      </div>
 
-        {/* Campo Senha */}
-        <div className="form-group">
-          <label htmlFor="password">Senha</label>
-          <div className="input-field">
-            <span className="input-icon">🔒</span>
-            <input
-              type={showPassword ? 'text' : 'password'}
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              disabled={isSubmitting}
-              className="form-input"
-              autoComplete="current-password"
-            />
-            <button
-              type="button"
-              className="toggle-password"
-              onClick={() => setShowPassword(!showPassword)}
-              disabled={isSubmitting}
-              title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-            >
-              {showPassword ? '👁️' : '👁️‍🗨️'}
-            </button>
-          </div>
-        </div>
-
-        {/* Checkbox Lembrar-me */}
-        <div className="form-options">
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              disabled={isSubmitting}
-            />
-            <span>Lembrar-me neste dispositivo</span>
-          </label>
-          <a href="#forgot" className="forgot-link">Esqueceu a senha?</a>
-        </div>
-
-        {/* Mensagem de Erro */}
-        {error && (
-          <div className="error-alert">
-            <span className="error-icon">⚠️</span>
-            <span className="error-text">{error}</span>
-          </div>
-        )}
-
-        {/* Botão de Login */}
-        <button
-          type="submit"
-          className="login-button"
-          disabled={isSubmitting}
+      {/* Opções */}
+      <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
+        <label className="flex items-center gap-2 cursor-pointer text-white text-sm font-medium">
+          <input
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            disabled={isSubmitting}
+            className="w-4 h-4 accent-emerald-400 cursor-pointer"
+          />
+          <span>Lembrar-me</span>
+        </label>
+        <a 
+          href="#forgot" 
+          className="text-emerald-400 hover:text-cyan-400 text-sm font-semibold transition-colors"
         >
-          {isSubmitting ? (
-            <>
-              <span className="spinner"></span>
-              <span>Entrando...</span>
-            </>
-          ) : (
-            <>
-              <span>Entrar</span>
-              <span className="button-icon">→</span>
-            </>
-          )}
-        </button>
+          Esqueceu a senha?
+        </a>
       </div>
 
-      {/* Footer do Formulário */}
-      <div className="form-footer">
-        <p>Não tem uma conta? <a href="#signup" className="signup-link">Solicite acesso</a></p>
+      {/* Mensagem de Erro */}
+      {error && (
+        <div className="mb-6 bg-red-500/20 border-l-4 border-orange-500 rounded-lg p-4 flex items-center gap-3 animate-shake">
+          <span className="text-lg">⚠️</span>
+          <span className="text-red-200 text-sm">{error}</span>
+        </div>
+      )}
+
+      {/* Botão de Login */}
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="w-full py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
+      >
+        {isSubmitting ? (
+          <>
+            <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+            <span>Entrando...</span>
+          </>
+        ) : (
+          <>
+            <span>Entrar</span>
+            <span className="text-lg transition-transform group-hover:translate-x-1">→</span>
+          </>
+        )}
+      </button>
+
+      {/* Footer */}
+      <div className="mt-6 text-center border-t border-white/20 pt-6">
+        <p className="text-white/80 text-sm">
+          Não tem uma conta?{' '}
+          <a href="#signup" className="text-emerald-400 hover:text-cyan-400 font-bold transition-colors">
+            Solicite acesso
+          </a>
+        </p>
       </div>
     </form>
   );
