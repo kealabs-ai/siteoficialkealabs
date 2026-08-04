@@ -1,0 +1,146 @@
+.configuracoes-page {
+  padding: 2rem 0;
+  min-height: calc(100vh - 60px);
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 2rem;
+  color: #0A2540;
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  color: #64748B;
+  font-size: 1rem;
+}
+
+.settings-container {
+  max-width: 600px;
+}
+
+.settings-section {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+.settings-section h2 {
+  color: #0A2540;
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.settings-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.setting-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.setting-field label {
+  color: #0A2540;
+  font-weight: 600;
+  flex: 1;
+}
+
+.setting-field input[type="text"],
+.setting-field input[type="email"],
+.setting-field input[type="tel"] {
+  flex: 1;
+  padding: 0.75rem;
+  margin-left: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.setting-field input[type="text"]:focus,
+.setting-field input[type="email"]:focus,
+.setting-field input[type="tel"]:focus {
+  outline: none;
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.setting-field input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #10B981;
+}
+
+.settings-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-primary {
+  flex: 1;
+  background-color: #10B981;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #059669;
+}
+
+.btn-secondary {
+  flex: 1;
+  background-color: #e2e8f0;
+  color: #0A2540;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #cbd5e1;
+}
+
+@media (max-width: 768px) {
+  .settings-container {
+    max-width: 100%;
+  }
+
+  .setting-field {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .setting-field input[type="text"],
+  .setting-field input[type="email"],
+  .setting-field input[type="tel"] {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+  }
+}

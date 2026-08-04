@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 import logo from '../assets/kealabs_logo_strategic.png';
 
@@ -24,7 +25,7 @@ const Header = () => {
             <li><a href="#servicos" onClick={() => setMenuOpen(false)}>Serviços</a></li>
             <li><a href="#cases" onClick={() => setMenuOpen(false)}>Cases</a></li>
             <li><a href="#sobre" onClick={() => setMenuOpen(false)}>Sobre Nós</a></li>
-            <li><a href="/app/login" onClick={() => setMenuOpen(false)}>Área do Cliente</a></li>
+            <li><Link to="/login" className="btn-area-cliente" onClick={() => setMenuOpen(false)}>Área do Cliente</Link></li>
             <li><a href="#contato" className="btn-contato" onClick={() => setMenuOpen(false)}>Fale com um Consultor</a></li>
           </ul>
         </nav>

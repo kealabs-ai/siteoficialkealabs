@@ -89,6 +89,28 @@
   color: var(--verde-esmeralda);
 }
 
+.btn-area-cliente {
+  background: linear-gradient(135deg, var(--verde-esmeralda), #059669);
+  color: white !important;
+  padding: 12px 28px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn-area-cliente:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+  background: linear-gradient(135deg, #059669, #047857);
+}
+
+.btn-area-cliente::after {
+  display: none;
+}
+
 .btn-contato {
   background: linear-gradient(135deg, var(--laranja-alerta), #FF8C42);
   color: white !important;
@@ -177,11 +199,31 @@
   .nav-menu li:nth-child(3) a::before { content: '💼'; }
   .nav-menu li:nth-child(4) a::before { content: '👤'; }
   .nav-menu li:nth-child(5) a::before { content: '🔐'; }
+  .nav-menu li:nth-child(6) a::before { content: '💬'; }
 
   .nav-menu a:hover,
   .nav-menu a:active {
     background: var(--cinza-claro);
     color: var(--verde-esmeralda);
+  }
+
+  .btn-area-cliente {
+    background: transparent !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    box-shadow: none !important;
+    color: var(--verde-esmeralda) !important;
+  }
+
+  .btn-area-cliente::before {
+    content: '🔐';
+    font-size: 28px;
+  }
+
+  .btn-area-cliente:hover {
+    background: var(--cinza-claro) !important;
+    transform: none !important;
+    box-shadow: none !important;
   }
 
   .btn-contato {
