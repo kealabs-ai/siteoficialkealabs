@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 // Servir arquivos estáticos do owner em /owner
 app.use('/owner', express.static(path.join(__dirname, 'owner', 'build')));
 
-// Rota para /owner - retorna index.html do owner para SPA routing
+// Rota para /owner/* - retorna index.html do owner para SPA routing
 app.get('/owner/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'owner', 'build', 'index.html'));
 });
