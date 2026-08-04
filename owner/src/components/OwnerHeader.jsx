@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './OwnerHeader.css';
 
 const OwnerHeader = () => {
@@ -20,7 +21,7 @@ const OwnerHeader = () => {
           </button>
 
           <ul className={`owner-nav-menu ${menuOpen ? 'active' : ''}`}>
-            <li><a href="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</a></li>
+            <li><Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link></li>
             <li><a href="#usuarios" onClick={() => setMenuOpen(false)}>Usuários</a></li>
             <li><a href="#relatorios" onClick={() => setMenuOpen(false)}>Relatórios</a></li>
             <li><a href="#configuracoes" onClick={() => setMenuOpen(false)}>Configurações</a></li>

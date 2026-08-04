@@ -2,11 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import OwnerHeader from './components/OwnerHeader';
 import Dashboard from './pages/Dashboard';
+import { getBasename } from './config';
 import './styles/global.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename={getBasename()}>
       <div className="App">
         <OwnerHeader />
         <Routes>
