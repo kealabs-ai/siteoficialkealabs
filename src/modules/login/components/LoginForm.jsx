@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { login } from '../../services/authService';
+import { login } from '../../../services/authService';
 
 const LoginForm = ({ onSubmit, isLoading: externalIsLoading }) => {
   const [email, setEmail] = useState('');
