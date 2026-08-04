@@ -5,6 +5,7 @@ const LoginForm = ({ onSubmit, isLoading }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,35 +21,42 @@ const LoginForm = ({ onSubmit, isLoading }) => {
       return;
     }
 
+    if (password.length < 6) {
+      setError('A senha deve ter pelo menos 6 caracteres');
+      return;
+    }
+
     onSubmit({ email, password });
   };
 
   return (
     <form className="login-form" onSubmit={handleSubmit}>
-      <div className="login-header">
-        <div className="logo-container">
-          <h1 className="logo">Kealabs</h1>
-          <p className="tagline">Área do Cliente</p>
-        </div>
+      <div className="form-header">
+        <h2>Bem-vindo de volta</h2>
+        <p>Acesse sua conta para continuar</p>
       </div>
 
       <div className="form-content">
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="seu@email.com"
-            disabled={isLoading}
-            className="form-input"
-          />
+          <div className="input-wrapper">
+            <span className="input-icon">✉️</span>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="seu@email.com"
+              disabled={isLoading}
+              className="form-input"
+            />
+          </div>
         </div>
 
         <div className="form-group">
           <label htmlFor="password">Senha</label>
-          <div className="password-input-wrapper">
+          <div className="input-wrapper">
+            <span className="input-icon">🔒</span>
             <input
               type={showPassword ? 'text' : 'password'}
               id="password"
@@ -63,13 +71,32 @@ const LoginForm = ({ onSubmit, isLoading }) => {
               className="toggle-password"
               onClick={() => setShowPassword(!showPassword)}
               disabled={isLoading}
+              title={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
             >
               {showPassword ? '👁️' : '👁️‍🗨️'}
             </button>
           </div>
         </div>
 
-        {error && <div className="error-message">{error}</div>}
+        <div className="form-options">
+          <label className="remember-me">
+            <input
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              disabled={isLoading}
+            />
+            <span>Lembrar-me neste dispositivo</span>
+          </label>
+          <a href="#forgot" className="forgot-password">Esqueceu a senha?</a>
+        </div>
+
+        {error && (
+          <div className="error-message">
+            <span className="error-icon">⚠️</span>
+            <span>{error}</span>
+          </div>
+        )}
 
         <button
           type="submit"
@@ -82,19 +109,29 @@ const LoginForm = ({ onSubmit, isLoading }) => {
               Entrando...
             </>
           ) : (
-            'Entrar'
+            <>
+              <span>Entrar na Conta</span>
+              <span className="button-arrow">→</span>
+            </>
           )}
         </button>
 
-        <div className="login-footer">
-          <a href="#forgot" className="forgot-password">Esqueceu a senha?</a>
-          <span className="divider">•</span>
-          <a href="/" className="back-to-site">Voltar ao site</a>
+        <div className="form-divider">
+          <span>Ou continue com</span>
+        </div>
+
+        <div className="social-login">
+          <button type="button" className="social-button google" disabled={isLoading}>
+            <span>Google</span>
+          </button>
+          <button type="button" className="social-button microsoft" disabled={isLoading}>
+            <span>Microsoft</span>
+          </button>
         </div>
       </div>
 
-      <div className="login-info">
-        <p>Não tem uma conta? <a href="#signup">Solicite acesso</a></p>
+      <div className="form-footer">
+        <p>Não tem uma conta? <a href="#signup" className="signup-link">Solicite acesso</a></p>
       </div>
     </form>
   );

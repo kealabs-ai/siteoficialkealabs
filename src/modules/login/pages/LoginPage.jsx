@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../components/LoginForm';
+import LoginBenefits from '../components/LoginBenefits';
 import '../styles/login.css';
 
 const LoginPage = () => {
@@ -30,8 +31,13 @@ const LoginPage = () => {
 
   return (
     <div className="login-page">
-      <div className="login-container">
-        <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
+      <div className="login-wrapper">
+        <div className="login-left">
+          <LoginBenefits />
+        </div>
+        <div className="login-right">
+          <LoginForm onSubmit={handleLogin} isLoading={isLoading} />
+        </div>
       </div>
     </div>
   );
