@@ -8,6 +8,7 @@ import Cases from './components/Cases';
 import Sobre from './components/Sobre';
 import Contato from './components/Contato';
 import Footer from './components/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
 import ClientApp from './pages/ClientApp';
 import LoginPage from './modules/login/pages/LoginPage';
 import DashboardPage from './modules/dashboard/pages/DashboardPage';
@@ -19,12 +20,42 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Rotas de Login e Módulos */}
+        {/* Rota de Login (pública) */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/usuarios" element={<UsuariosPage />} />
-        <Route path="/relatorios" element={<RelatoriosPage />} />
-        <Route path="/configuracoes" element={<ConfiguracoesPage />} />
+        
+        {/* Rotas Protegidas - Módulos */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/usuarios"
+          element={
+            <ProtectedRoute>
+              <UsuariosPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/relatorios"
+          element={
+            <ProtectedRoute>
+              <RelatoriosPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/configuracoes"
+          element={
+            <ProtectedRoute>
+              <ConfiguracoesPage />
+            </ProtectedRoute>
+          }
+        />
         
         {/* Rotas legadas */}
         <Route path="/app/login" element={<ClientApp />} />
