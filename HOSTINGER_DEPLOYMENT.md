@@ -31,9 +31,10 @@ Isso criará:
 3. Faça upload de:
    - `build/` (conteúdo do site)
    - `owner/build/` (conteúdo do owner)
-   - `server.js` (servidor proxy)
+   - `server.js` (servidor Node.js)
    - `package.json` (dependências)
    - `package-lock.json`
+   - `.htaccess` (roteamento)
 
 #### Opção B: Via Git
 
@@ -102,16 +103,17 @@ public_html/
 │   └── build/            # Owner compilado
 │       ├── index.html
 │       ├── static/
+│       ├── .htaccess
 │       └── ...
-├── server.js             # Servidor proxy
+├── server.js             # Servidor Node.js
 ├── package.json
 ├── package-lock.json
 └── .htaccess             # Configuração Apache
 ```
 
-## 🔧 Arquivo .htaccess
+## 🔧 Arquivos .htaccess
 
-Crie um arquivo `.htaccess` na raiz (`public_html/`) com:
+### Raiz (public_html/.htaccess)
 
 ```apache
 <IfModule mod_rewrite.c>
@@ -122,12 +124,28 @@ Crie um arquivo `.htaccess` na raiz (`public_html/`) com:
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   
-  # Rotear para index.html para SPA
-  RewriteRule ^(?!owner/).*$ index.html [L]
-  
-  # Rotear /owner para owner/build/index.html
-  RewriteRule ^owner/(.*)$ owner/build/$1 [L]
+  # Rotear /owner para owner/build/index.html para SPA routing
+  RewriteRule ^owner/(.*)$ owner/build/index.html [L]
   RewriteRule ^owner/?$ owner/build/index.html [L]
+  
+  # Rotear para index.html para SPA (exceto /owner)
+  RewriteRule ^(?!owner/).*$ index.html [L]
+</IfModule>
+```
+
+### Owner (public_html/owner/build/.htaccess)
+
+```apache
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /owner/
+  
+  # Não reescrever arquivos e diretórios reais
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Rotear para index.html para SPA routing
+  RewriteRule ^.*$ index.html [L]
 </IfModule>
 ```
 
@@ -186,8 +204,9 @@ npm run start:production
 ### /owner retorna 404
 
 1. Verifique se `owner/build/` existe
-2. Verifique o arquivo `.htaccess`
-3. Reinicie a aplicação Node.js
+2. Verifique se `owner/build/.htaccess` existe
+3. Verifique se `owner/build/index.html` existe
+4. Reinicie a aplicação Node.js
 
 ### Porta já está em uso
 
@@ -239,4 +258,4 @@ No cPanel, você pode definir variáveis de ambiente na configuração da aplica
 
 - [Hostinger Node.js Setup](https://support.hostinger.com/en/articles/4291348-how-to-set-up-a-node-js-application)
 - [Express.js Documentation](https://expressjs.com/)
-- [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware)
+- [Apache mod_rewrite](https://httpd.apache.org/docs/current/mod/mod_rewrite.html)

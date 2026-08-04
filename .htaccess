@@ -6,12 +6,12 @@
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   
+  # Rotear /owner para owner/build/index.html para SPA routing
+  RewriteRule ^owner/(.*)$ owner/build/index.html [L]
+  RewriteRule ^owner/?$ owner/build/index.html [L]
+  
   # Rotear para index.html para SPA (exceto /owner)
   RewriteRule ^(?!owner/).*$ index.html [L]
-  
-  # Rotear /owner para owner/build/index.html
-  RewriteRule ^owner/(.*)$ owner/build/$1 [L]
-  RewriteRule ^owner/?$ owner/build/index.html [L]
 </IfModule>
 
 # Compressão Gzip
