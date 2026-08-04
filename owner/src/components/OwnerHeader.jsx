@@ -21,10 +21,10 @@ const OwnerHeader = () => {
           </button>
 
           <ul className={`owner-nav-menu ${menuOpen ? 'active' : ''}`}>
-            <li><Link to="/dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link></li>
-            <li><a href="#usuarios" onClick={() => setMenuOpen(false)}>Usuários</a></li>
-            <li><a href="#relatorios" onClick={() => setMenuOpen(false)}>Relatórios</a></li>
-            <li><a href="#configuracoes" onClick={() => setMenuOpen(false)}>Configurações</a></li>
+            <li><Link to="/" onClick={() => setMenuOpen(false)}>Dashboard</Link></li>
+            <li><Link to="/usuarios" onClick={() => setMenuOpen(false)}>Usuários</Link></li>
+            <li><Link to="/relatorios" onClick={() => setMenuOpen(false)}>Relatórios</Link></li>
+            <li><Link to="/configuracoes" onClick={() => setMenuOpen(false)}>Configurações</Link></li>
             <li><a href="/" className="btn-voltar">Voltar ao Site</a></li>
           </ul>
         </nav>
