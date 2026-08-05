@@ -16,7 +16,29 @@ const OrcamentosPage = () => {
   const fetchOrcamentos = async () => {
     try {
       const { data } = await api.get('/quotes');
-      setOrcamentos(data || []);
+      let orcamentosList = data?.data || data || [];
+      
+      if (!Array.isArray(orcamentosList)) {
+        orcamentosList = orcamentosList ? [orcamentosList] : [];
+      }
+      
+      const mappedOrcamentos = orcamentosList
+        .filter(o => o && o.quote_id)
+        .map(o => ({
+          id: String(o.quote_id),
+          nome: o.client_name || '',
+          email: o.client_email || '',
+          cpfCnpj: o.client_cpf_cnpj || '',
+          telefone: o.client_phone || '',
+          serviceType: o.service_type || '',
+          status: o.status || 'PENDING',
+          setupLiquido: o.setup_value || 0,
+          totalCobrado: (o.setup_value || 0) + (o.monthly_value || 0),
+          parcelas: 1,
+          createdAt: o.created_at || new Date().toISOString()
+        }));
+      
+      setOrcamentos(mappedOrcamentos);
     } catch (err) {
       console.error('Erro ao buscar orçamentos:', err);
     } finally {
