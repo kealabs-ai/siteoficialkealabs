@@ -8,7 +8,28 @@ const SecaoCliente = ({ formData, setFormData }) => {
     const fetchProspects = async () => {
       try {
         const { data } = await api.get('/prospects');
-        setProspects(data || []);
+        let prospectsList = data?.data || data || [];
+        
+        if (!Array.isArray(prospectsList)) {
+          prospectsList = prospectsList ? [prospectsList] : [];
+        }
+        
+        const mappedProspects = prospectsList
+          .filter(p => p && p.id)
+          .map(p => ({
+            id: String(p.id),
+            nome: p.name || '',
+            email: p.email || '',
+            cpfCnpj: p.cpf_cnpj || '',
+            telefone: p.phone || '',
+            empresa: p.company || '',
+            origem: p.source || '',
+            status: p.status || 'NEW',
+            observacoes: p.notes || '',
+            createdAt: p.created_at || new Date().toISOString()
+          }));
+        
+        setProspects(mappedProspects);
       } catch (err) {
         console.error('Erro ao buscar prospects:', err);
       }

@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://srv1023256.hstgr.cloud/api',
+  baseURL: process.env.NODE_ENV === 'production' 
+    ? 'https://srv1023256.hstgr.cloud/k1/api'
+    : 'https://srv1023256.hstgr.cloud/k1/api',
   headers: {
     'Content-Type': 'application/json'
   }
