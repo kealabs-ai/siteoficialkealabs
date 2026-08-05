@@ -1,0 +1,49 @@
+{
+  "prospectId": "123",
+  "nome": "Empresa XYZ",
+  "email": "contato@empresa.com",
+  "cpfCnpj": "12.345.678/0001-90",
+  "telefone": "(11) 99999-9999",
+  "parcelas": 3,
+  "setupLiquido": 15000,
+  "mdrPercentage": 0.029,
+  "installmentLimit": 12,
+  "commissionRate": 0.1,
+  "servicos": {
+    "web": {
+      "ativo": true,
+      "menus": 5,
+      "asaas": true
+    },
+    "miniSite": {
+      "ativo": false,
+      "paginas": 1,
+      "instagram": false,
+      "whatsapp": false
+    },
+    "bi": {
+      "ativo": true,
+      "fontes": ["excel", "api"],
+      "complexidade": "advanced"
+    },
+    "aiAgent": {
+      "ativo": false,
+      "plano": "free",
+      "agentes": 1,
+      "rag": false,
+      "voz": false
+    }
+  },
+  "modulos": {
+    "n8n": true,
+    "whatsapp": false,
+    "agileSetup": true,
+    "consultor": false,
+    "pandaVideos": true,
+    "bunnycdn": false,
+    "mentoringHoras": 10,
+    "hospedagem": ["vps-pro", "compartilhada-premium"]
+  },
+  "pandaPlano": "pro",
+  "bunnyPlano": null
+}
