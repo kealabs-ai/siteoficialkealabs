@@ -83,7 +83,44 @@ export const useProspects = () => {
       try {
         // Tenta buscar da API real
         const { data } = await api.get('/prospects');
-        setProspects(data || []);
+        console.log('Dados brutos da API:', data);
+        
+        // Extrai a lista do endpoint conforme especificação
+        let prospectsList = data?.data || data || [];
+        
+        // Garante que é um array
+        if (!Array.isArray(prospectsList)) {
+          prospectsList = prospectsList ? [prospectsList] : [];
+        }
+        
+        console.log('Lista de prospects antes do mapeamento:', prospectsList);
+        
+        // Mapeia os campos da API para o formato esperado pela tela
+        const mappedProspects = prospectsList
+          .filter(p => p && p.id) // Filtra prospects válidos com ID
+          .map((p, index) => ({
+            id: String(p.id), // Garante que ID é string
+            nome: p.name || '',
+            email: p.email || '',
+            cpfCnpj: p.cpf_cnpj || '',
+            telefone: p.phone || '',
+            empresa: p.company || '',
+            origem: p.source || '',
+            status: p.status || 'NEW',
+            observacoes: p.notes || '',
+            createdAt: p.created_at || new Date().toISOString()
+          }));
+        
+        console.log('Prospects mapeados:', mappedProspects);
+        
+        // Debug: verifica IDs duplicados
+        const ids = mappedProspects.map(p => p.id);
+        const duplicates = ids.filter((id, index) => ids.indexOf(id) !== index);
+        if (duplicates.length > 0) {
+          console.warn('IDs duplicados encontrados:', duplicates);
+        }
+        
+        setProspects(mappedProspects);
         setUseMock(false);
       } catch (apiError) {
         // Se falhar, usa dados mock
@@ -113,10 +150,32 @@ export const useProspects = () => {
         setProspects([newProspect, ...prospects]);
         return newProspect;
       } else {
-        // Real: envia para API
-        const { data } = await api.post('/prospects', formData);
-        setProspects([data, ...prospects]);
-        return data;
+        // Real: converte para formato da API e envia
+        const apiData = {
+          name: formData.nome,
+          email: formData.email,
+          cpf_cnpj: formData.cpfCnpj,
+          phone: formData.telefone,
+          company: formData.empresa,
+          source: formData.origem,
+          status: formData.status,
+          notes: formData.observacoes
+        };
+        const { data } = await api.post('/prospects', apiData);
+        const mappedData = {
+          id: data.id,
+          nome: data.name,
+          email: data.email,
+          cpfCnpj: data.cpf_cnpj,
+          telefone: data.phone,
+          empresa: data.company,
+          origem: data.source,
+          status: data.status,
+          observacoes: data.notes,
+          createdAt: data.created_at
+        };
+        setProspects([mappedData, ...prospects]);
+        return mappedData;
       }
     } catch (err) {
       console.error('Erro ao criar prospect:', err);
@@ -134,8 +193,19 @@ export const useProspects = () => {
         setProspects(updated);
         return updated.find(p => p.id === id);
       } else {
-        // Real: envia para API
-        await api.post('/prospects/update', { id, ...formData });
+        // Real: converte para formato da API e envia
+        const apiData = {
+          id,
+          name: formData.nome,
+          email: formData.email,
+          cpf_cnpj: formData.cpfCnpj,
+          phone: formData.telefone,
+          company: formData.empresa,
+          source: formData.origem,
+          status: formData.status,
+          notes: formData.observacoes
+        };
+        await api.post('/prospects/update', apiData);
         await fetchProspects();
       }
     } catch (err) {
