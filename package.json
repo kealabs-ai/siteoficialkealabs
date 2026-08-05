@@ -3,12 +3,28 @@
   "version": "1.0.0",
   "private": true,
   "description": "Kealabs - AI-First Intelligence Platform",
+  "type": "module",
   "scripts": {
-    "start": "cd app && npm start",
-    "build": "cd app && npm run build",
-    "preview": "cd app && npm run preview",
-    "install:app": "cd app && npm install",
-    "postinstall": "npm run install:app"
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "lucide-react": "^0.263.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "typescript": "^5.3.2",
+    "vite": "^5.0.6"
   },
   "engines": {
     "node": ">=18.0.0",

@@ -15,6 +15,8 @@ import DashboardPage from './modules/dashboard/pages/DashboardPage';
 import UsuariosPage from './modules/usuarios/pages/UsuariosPage';
 import RelatoriosPage from './modules/relatorios/pages/RelatoriosPage';
 import ConfiguracoesPage from './modules/configuracoes/pages/ConfiguracoesPage';
+import HomePage from './modules/home/pages/HomePage';
+import OrcamentosPage from './modules/orcamentos/pages/OrcamentosPage';
 
 function App() {
   return (
@@ -24,6 +26,14 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         
         {/* Rotas Protegidas - Módulos */}
+        <Route
+          path="/home/*"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/dashboard"
           element={
@@ -53,6 +63,14 @@ function App() {
           element={
             <ProtectedRoute>
               <ConfiguracoesPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orcamentos"
+          element={
+            <ProtectedRoute>
+              <OrcamentosPage />
             </ProtectedRoute>
           }
         />

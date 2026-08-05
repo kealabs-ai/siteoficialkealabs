@@ -14,11 +14,12 @@ const LoginPage = () => {
     try {
       const user = await getCurrentUser();
       localStorage.setItem('user', JSON.stringify(user));
-      navigate('/dashboard');
+      localStorage.setItem('userName', user.name || credentials.email);
+      navigate('/home/dashboard');
     } catch (error) {
       console.error('Erro ao obter dados do usuário:', error);
       if (localStorage.getItem('auth_token')) {
-        navigate('/dashboard');
+        navigate('/home/dashboard');
       }
     } finally {
       setIsLoading(false);
