@@ -465,7 +465,7 @@ const DashboardPage = () => {
 
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
                   <button
-                    key={page}
+                    key={`page-${page}`}
                     onClick={() => setCurrentPage(page)}
                     style={{
                       width: '2rem',

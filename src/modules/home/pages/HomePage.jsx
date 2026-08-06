@@ -6,6 +6,7 @@ import Sidebar from '../components/Sidebar';
 import DashboardPage from './DashboardPage';
 import OrcamentosPage from '../../orcamentos/pages/OrcamentosPage';
 import ProspectsPage from '../../prospects/pages/ProspectsPage';
+import AgentPage from '../../agent/AgentPage';
 import '../styles/home.css';
 
 const HomePage = () => {
@@ -23,7 +24,7 @@ const HomePage = () => {
             <Route path="/orcamentos" element={<OrcamentosPage />} />
             <Route path="/prospect" element={<ProspectsPage />} />
             <Route path="/crm" element={<CRMContent />} />
-            <Route path="/agent" element={<AgentContent />} />
+            <Route path="/agent" element={<AgentPage />} />
             <Route path="/" element={<DashboardPage />} />
           </Routes>
         </main>
@@ -53,24 +54,6 @@ const CRMContent = () => (
   </div>
 );
 
-const AgentContent = () => (
-  <div>
-    <PageHeader
-      title="Agent Kea"
-      description="Interaja com o Agent Kea para automação inteligente"
-      icon={Bot}
-      color="#0A2540"
-    />
-    
-    <div style={{ backgroundColor: 'white', borderRadius: '0.5rem', boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)', padding: '1.5rem' }}>
-      <div style={{ textAlign: 'center', paddingTop: '3rem', paddingBottom: '3rem' }}>
-        <Bot size={48} style={{ margin: '0 auto 1rem', color: '#d1d5db' }} />
-        <p style={{ color: '#6b7280' }}>Agent Kea em breve</p>
-        <p style={{ fontSize: '0.875rem', color: '#9ca3af', marginTop: '0.5rem' }}>Automação inteligente para seu negócio</p>
-      </div>
-    </div>
-  </div>
-);
 
 const PageHeader = ({ title, description, icon: Icon, color }) => (
   <div style={{ marginBottom: '2rem' }}>

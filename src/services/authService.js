@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://srv1023256.hstgr.cloud/k1/api';
+import api from './api';
 
 // Chaves para localStorage
 const TOKEN_KEY = 'auth_token';
@@ -10,21 +10,8 @@ const USER_KEY = 'user_data';
  */
 export const login = async (email, password) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Erro ao fazer login');
-    }
-
-    const data = await response.json();
-
+    const { data } = await api.post('/auth/login', { email, password });
+    
     // Armazenar tokens
     if (data.access_token) {
       localStorage.setItem(TOKEN_KEY, data.access_token);
@@ -51,24 +38,7 @@ export const getCurrentUser = async () => {
       throw new Error('Token não encontrado');
     }
 
-    const response = await fetch(`${API_BASE_URL}/auth/me`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      if (response.status === 401) {
-        // Token expirado, tentar renovar
-        await refreshToken();
-        return getCurrentUser(); // Tentar novamente
-      }
-      throw new Error('Erro ao obter dados do usuário');
-    }
-
-    const data = await response.json();
+    const { data } = await api.get('/auth/me');
 
     // Armazenar dados do usuário
     localStorage.setItem(USER_KEY, JSON.stringify(data));
@@ -91,20 +61,7 @@ export const validateToken = async (token = null) => {
       throw new Error('Token não encontrado');
     }
 
-    const response = await fetch(`${API_BASE_URL}/auth/validate`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${tokenToValidate}`,
-      },
-      body: JSON.stringify({ token: tokenToValidate }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Token inválido');
-    }
-
-    const data = await response.json();
+    const { data } = await api.post('/auth/validate', { token: tokenToValidate });
     return data;
   } catch (error) {
     console.error('Erro ao validar token:', error);
@@ -123,21 +80,7 @@ export const refreshToken = async () => {
       throw new Error('Refresh token não encontrado');
     }
 
-    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ refresh_token: refreshTokenValue }),
-    });
-
-    if (!response.ok) {
-      // Refresh token expirado, fazer logout
-      logout();
-      throw new Error('Sessão expirada. Faça login novamente.');
-    }
-
-    const data = await response.json();
+    const { data } = await api.post('/auth/refresh', { refresh_token: refreshTokenValue });
 
     // Atualizar tokens
     if (data.access_token) {
@@ -150,6 +93,7 @@ export const refreshToken = async () => {
     return data;
   } catch (error) {
     console.error('Erro ao renovar token:', error);
+    logout();
     throw error;
   }
 };
@@ -186,39 +130,15 @@ export const isAuthenticated = () => {
 };
 
 /**
- * Fazer requisição autenticada genérica
+ * Fazer requisição autenticada genérica (fallback)
  */
 export const authenticatedFetch = async (endpoint, options = {}) => {
   try {
-    const token = localStorage.getItem(TOKEN_KEY);
-
-    if (!token) {
-      throw new Error('Não autenticado');
-    }
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-      ...options.headers,
-    };
-
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await api({
+      url: endpoint,
       ...options,
-      headers,
     });
-
-    if (response.status === 401) {
-      // Token expirado, tentar renovar
-      await refreshToken();
-      return authenticatedFetch(endpoint, options); // Tentar novamente
-    }
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || 'Erro na requisição');
-    }
-
-    return await response.json();
+    return response.data;
   } catch (error) {
     console.error('Erro na requisição autenticada:', error);
     throw error;
