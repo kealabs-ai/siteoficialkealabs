@@ -45,6 +45,7 @@ export const useAgentChat = () => {
   };
 
   const getApiKeyForModel = (model) => {
+    if (!model || typeof model !== 'string') return '';
     if (model.startsWith('gemini')) return settings.llm_key_gemini || '';
     if (model.startsWith('gpt')) return settings.llm_key_openai || '';
     if (model.startsWith('claude')) return settings.llm_key_anthropic || '';

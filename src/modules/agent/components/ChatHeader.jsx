@@ -30,16 +30,19 @@ const ChatHeader = ({
       { value: 'gemini-pro', label: 'Gemini Pro' },
       { value: 'gemini-pro-vision', label: 'Gemini Pro Vision' }
     ],
+    'Anthropic': [
+      { value: 'claude-3-5-sonnet', label: 'Claude 3.5 Sonnet' },
+      { value: 'claude-3-opus', label: 'Claude 3 Opus' },
+      { value: 'claude-3-sonnet', label: 'Claude 3 Sonnet' },
+      { value: 'claude-3-haiku', label: 'Claude 3 Haiku' },
+      { value: 'claude-2.1', label: 'Claude 2.1' },
+      { value: 'claude-2', label: 'Claude 2' }
+    ],
     'OpenAI': [
       { value: 'gpt-4-turbo', label: 'GPT-4 Turbo' },
       { value: 'gpt-4', label: 'GPT-4' },
       { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo' },
       { value: 'gpt-3.5-turbo-16k', label: 'GPT-3.5 Turbo 16K' }
-    ],
-    'Anthropic': [
-      { value: 'claude-3-opus', label: 'Claude 3 Opus' },
-      { value: 'claude-3-sonnet', label: 'Claude 3 Sonnet' },
-      { value: 'claude-3-haiku', label: 'Claude 3 Haiku' }
     ]
   };
 
