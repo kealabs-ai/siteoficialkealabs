@@ -13,6 +13,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow: hidden;
 }
 
 * {
@@ -30,6 +31,9 @@ body {
   background-attachment: fixed;
   scroll-behavior: smooth;
   position: relative;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
 }
 
 body::before {
@@ -115,8 +119,6 @@ section {
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, var(--ciano-digital), var(--verde-esmeralda));
 }
-
-/* Selection */
 ::selection {
   background: var(--verde-esmeralda);
   color: white;
