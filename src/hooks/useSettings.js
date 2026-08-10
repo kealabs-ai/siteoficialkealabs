@@ -13,6 +13,7 @@ export const useSettings = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [agent, setAgent] = useState(null);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -20,7 +21,11 @@ export const useSettings = () => {
         const data = await authenticatedFetch('/settings');
         setSettings(data || settings);
       } catch (err) {
-        console.error('Erro ao buscar settings:', err);
+        if (err.response?.status === 404) {
+          console.log('Endpoint /settings não disponível, usando valores padrão');
+        } else {
+          console.error('Erro ao buscar settings:', err);
+        }
       } finally {
         setLoading(false);
       }
@@ -29,7 +34,7 @@ export const useSettings = () => {
     fetchSettings();
   }, []);
 
-  return { settings, loading, error };
+  return { settings, loading, error, agent };
 };
 
 export default useSettings;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import InputMask from 'react-input-mask';
 import api from '../../../services/api';
 
 const SecaoCliente = ({ formData, setFormData }) => {
@@ -59,6 +60,14 @@ const SecaoCliente = ({ formData, setFormData }) => {
     return apenasNumeros.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
   };
 
+  const formatarCpfCnpj = (valor) => {
+    const apenasNumeros = valor.replace(/\D/g, '');
+    if (apenasNumeros.length <= 11) {
+      return apenasNumeros.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+    return apenasNumeros.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+  };
+
   return (
     <fieldset className="form-section">
       <legend>Cliente</legend>
@@ -97,22 +106,29 @@ const SecaoCliente = ({ formData, setFormData }) => {
         </div>
         <div className="form-group">
           <label>CPF / CNPJ</label>
-          <input
-            type="text"
+          <InputMask
+            mask="999.999.999-99"
+            maskChar="_"
             value={formData.cpfCnpj}
             onChange={(e) => setFormData({ ...formData, cpfCnpj: e.target.value })}
-          />
+            placeholder="000.000.000-00"
+          >
+            {(inputProps) => <input {...inputProps} type="text" />}
+          </InputMask>
         </div>
       </div>
 
       <div className="form-group">
         <label>Telefone / WhatsApp</label>
-        <input
-          type="tel"
+        <InputMask
+          mask="(99) 99999-9999"
+          maskChar="_"
           value={formData.telefone}
-          onChange={(e) => setFormData({ ...formData, telefone: formatarTelefone(e.target.value) })}
+          onChange={(e) => setFormData({ ...formData, telefone: e.target.value })}
           placeholder="(11) 99999-9999"
-        />
+        >
+          {(inputProps) => <input {...inputProps} type="tel" />}
+        </InputMask>
       </div>
     </fieldset>
   );

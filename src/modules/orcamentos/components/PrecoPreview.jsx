@@ -1,10 +1,12 @@
 import React from 'react';
 
 const PrecoPreview = ({ preco, parcelas, mdrPercentage, commissionRate }) => {
-  const mdrValor = preco * mdrPercentage;
-  const totalCobrado = preco + mdrValor;
-  const parcelaMes = totalCobrado / parcelas;
-  const liquidoAntecipado = preco;
+  const mdr = mdrPercentage || 0;
+  const commission = commissionRate || 0;
+  const mdrValor = preco * mdr || 0;
+  const totalCobrado = preco + mdrValor || 0;
+  const parcelaMes = totalCobrado / parcelas || 0;
+  const liquidoAntecipado = preco || 0;
 
   return (
     <div className="preco-preview">
@@ -15,23 +17,23 @@ const PrecoPreview = ({ preco, parcelas, mdrPercentage, commissionRate }) => {
       <div className="preview-grid">
         <div className="preview-item">
           <span className="label">Setup Líquido</span>
-          <span className="valor">R$ {preco.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+          <span className="valor">R$ {(preco || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
         </div>
         
         <div className="preview-item">
-          <span className="label">MDR ({(mdrPercentage * 100).toFixed(1)}%)</span>
-          <span className="valor">R$ {mdrValor.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+          <span className="label">MDR ({(mdr * 100).toFixed(1)}%)</span>
+          <span className="valor">R$ {(mdrValor || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
         </div>
         
         <div className="preview-item highlight">
           <span className="label">Cobrar do Cliente</span>
-          <span className="valor">{parcelas}× R$ {parcelaMes.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+          <span className="valor">{parcelas}× R$ {(parcelaMes || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
         </div>
 
-        {commissionRate > 0 && (
+        {commission > 0 && (
           <div className="preview-item commission">
-            <span className="label">Comissão ({(commissionRate * 100).toFixed(1)}%)</span>
-            <span className="valor">R$ {(preco * commissionRate).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <span className="label">Comissão ({(commission * 100).toFixed(1)}%)</span>
+            <span className="valor">R$ {(preco * commission || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
           </div>
         )}
       </div>
@@ -39,15 +41,15 @@ const PrecoPreview = ({ preco, parcelas, mdrPercentage, commissionRate }) => {
       <div className="preview-details">
         <div className="detail-row">
           <span>Total Cobrado:</span>
-          <strong>R$ {totalCobrado.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
+          <strong>R$ {(totalCobrado || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
         </div>
         <div className="detail-row">
           <span>Líquido Mês a Mês:</span>
-          <strong>R$ {(preco / parcelas).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
+          <strong>R$ {((preco / parcelas) || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
         </div>
         <div className="detail-row">
           <span>Líquido Antecipado:</span>
-          <strong>R$ {liquidoAntecipado.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
+          <strong>R$ {(liquidoAntecipado || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
         </div>
       </div>
     </div>

@@ -16,71 +16,116 @@ const SettingsPage = () => {
 
   const {
     settings,
+    settingsChanges,
     agent,
+    agentChanges,
+    agents,
     loading,
     saving,
     saveMessage,
     updateSetting,
     updateAgent,
+    saveAgent,
+    cancelAgentChanges,
+    savePricingSettings,
+    cancelPricingChanges,
     saveLLMKeys,
-    resetDefaults
+    resetDefaults,
+    selectAgent,
+    createNewAgent
   } = useSettings();
 
   const handleSaveLLMKeys = () => {
     saveLLMKeys(llmKeys);
   };
 
+  const hasChanges = {
+    pricing: Object.keys(settingsChanges).length > 0,
+    agent: Object.keys(agentChanges).length > 0,
+    llm: false
+  };
+
   if (loading) {
-    return <div className="settings-page"><p>Carregando...</p></div>;
+    return (
+      <main className="flex-1 overflow-y-auto">
+        <div className="p-8">
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </main>
+    );
   }
 
   return (
-    <div className="settings-page">
-      <div className="settings-container">
+    <main className="flex-1 overflow-y-auto">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
-        <div className="settings-header">
+        <div className="flex justify-between items-start mb-8">
           <div>
-            <h1>Configurações</h1>
-            <p>Gerencie precificação, perfil do agente e modelos de IA</p>
+            <h1 className="text-3xl font-bold text-gray-900">Configurações</h1>
+            <p className="text-gray-600 mt-1">Gerencie precificação, perfil do agente e modelos de IA</p>
           </div>
           <button 
-            className="btn-reset"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-all"
             onClick={resetDefaults}
             title="Restaurar valores padrão"
           >
-            🔄 Restaurar padrões
+            <span>🔄</span>
+            Restaurar padrões
           </button>
         </div>
 
         {/* Tabs */}
-        <div className="settings-tabs">
-          <button
-            className={`tab-button ${activeTab === 'pricing' ? 'active' : ''}`}
-            onClick={() => setActiveTab('pricing')}
-          >
-            💰 Precificação
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'agent' ? 'active' : ''}`}
-            onClick={() => setActiveTab('agent')}
-          >
-            🤖 Perfil do Agente
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'llm' ? 'active' : ''}`}
-            onClick={() => setActiveTab('llm')}
-          >
-            🧠 Modelo de IA
-          </button>
+        <div className="border-b border-gray-200 mb-8">
+          <div className="flex gap-8">
+            <button
+              className={`pb-4 px-1 font-medium text-sm border-b-2 transition-colors ${
+                activeTab === 'pricing'
+                  ? 'border-emerald-600 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+              onClick={() => setActiveTab('pricing')}
+            >
+              💰 Precificação
+            </button>
+            <button
+              className={`pb-4 px-1 font-medium text-sm border-b-2 transition-colors ${
+                activeTab === 'agent'
+                  ? 'border-emerald-600 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+              onClick={() => setActiveTab('agent')}
+            >
+              🤖 Perfil do Agente
+            </button>
+            <button
+              className={`pb-4 px-1 font-medium text-sm border-b-2 transition-colors ${
+                activeTab === 'llm'
+                  ? 'border-emerald-600 text-emerald-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+              onClick={() => setActiveTab('llm')}
+            >
+              🧠 Modelo de IA
+            </button>
+          </div>
         </div>
 
         {/* Tab Content */}
-        <div className="settings-content">
+        <div className="bg-white rounded-lg shadow-sm p-6">
           {activeTab === 'pricing' && (
-            <PricingTab settings={settings} onUpdateSetting={updateSetting} />
+            <PricingTab 
+              settings={{ ...settings, ...settingsChanges }} 
+              onUpdateSetting={updateSetting} 
+            />
           )}
           {activeTab === 'agent' && (
-            <AgentProfileTab agent={agent} onUpdateAgent={updateAgent} />
+            <AgentProfileTab 
+              agent={{ ...agent, ...agentChanges }} 
+              agents={agents}
+              onUpdateAgent={updateAgent}
+              onSelectAgent={selectAgent}
+              onCreateNewAgent={createNewAgent}
+            />
           )}
           {activeTab === 'llm' && (
             <LLMModelTab 
@@ -92,21 +137,67 @@ const SettingsPage = () => {
           )}
         </div>
 
-        {/* Save Button */}
-        {activeTab === 'llm' && (
-          <div className="settings-footer">
+        {/* Action Buttons */}
+        <div className="mt-6 flex items-center gap-4">
+          {activeTab === 'pricing' && (
+            <>
+              <button
+                className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
+                onClick={savePricingSettings}
+                disabled={saving || !hasChanges.pricing}
+              >
+                <span>💾</span>
+                {saving ? 'Salvando...' : 'Salvar'}
+              </button>
+              {hasChanges.pricing && (
+                <button
+                  className="inline-flex items-center gap-2 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all"
+                  onClick={cancelPricingChanges}
+                >
+                  Cancelar
+                </button>
+              )}
+            </>
+          )}
+          
+          {activeTab === 'agent' && (
+            <>
+              <button
+                className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
+                onClick={saveAgent}
+                disabled={saving || !hasChanges.agent}
+              >
+                <span>💾</span>
+                {saving ? 'Salvando...' : 'Salvar'}
+              </button>
+              {hasChanges.agent && (
+                <button
+                  className="inline-flex items-center gap-2 px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all"
+                  onClick={cancelAgentChanges}
+                >
+                  Cancelar
+                </button>
+              )}
+            </>
+          )}
+          
+          {activeTab === 'llm' && (
             <button
-              className="btn-save"
+              className="inline-flex items-center gap-2 px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-all disabled:bg-gray-400 disabled:cursor-not-allowed"
               onClick={handleSaveLLMKeys}
               disabled={saving}
             >
-              {saving ? 'Salvando...' : '💾 Salvar configurações'}
+              <span>💾</span>
+              {saving ? 'Salvando...' : 'Salvar'}
             </button>
-            {saveMessage && <span className="save-message">{saveMessage}</span>}
-          </div>
-        )}
+          )}
+          
+          {saveMessage && (
+            <span className="text-sm text-emerald-600 font-medium">{saveMessage}</span>
+          )}
+        </div>
       </div>
-    </div>
+    </main>
   );
 };
 

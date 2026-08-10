@@ -11,9 +11,32 @@
   --cinza-claro: #F8FAFC;
 }
 
+#root {
+  width: 100%;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.App {
+  width: 100%;
+  min-height: 100vh;
+}
+
 html {
   scroll-behavior: smooth;
-  overflow: hidden;
+  overflow-x: hidden;
+}
+
+/* Âncoras com destaque */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+section[id]::before {
+  content: '';
+  display: block;
+  height: 80px;
+  margin: -80px 0 0 0;
 }
 
 * {
@@ -27,34 +50,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--azul-profundo);
-  background: linear-gradient(135deg, #f0f5fa 0%, #e8f0f8 100%);
-  background-attachment: fixed;
+  background: #f3f4f6;
   scroll-behavior: smooth;
   position: relative;
-  overflow: hidden;
-  width: 100vw;
-  height: 100vh;
-}
-
-body::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(0, 180, 216, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(10, 37, 64, 0.03) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-  animation: bgPulse 15s ease-in-out infinite;
-}
-
-@keyframes bgPulse {
-  0%, 100% { opacity: 0.7; }
-  50% { opacity: 1; }
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -104,20 +105,30 @@ section {
 
 /* Scrollbar Styling */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(248, 250, 252, 0.5);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--verde-esmeralda), var(--ciano-digital));
-  border-radius: 5px;
+  background: linear-gradient(180deg, var(--verde-esmeralda) 0%, var(--ciano-digital) 100%);
+  border-radius: 10px;
+  border: 2px solid rgba(248, 250, 252, 0.5);
+  transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--ciano-digital), var(--verde-esmeralda));
+  background: linear-gradient(180deg, var(--ciano-digital) 0%, var(--verde-esmeralda) 100%);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-color: linear-gradient(180deg, var(--verde-esmeralda), var(--ciano-digital)) rgba(248, 250, 252, 0.5);
+  scrollbar-width: thin;
 }
 ::selection {
   background: var(--verde-esmeralda);
@@ -195,4 +206,13 @@ section {
   p {
     font-size: 14px;
   }
+}
+
+/* Sobrescrita de estilos Tailwind */
+.ml-64 {
+  margin-left: 0rem !important;
+}
+
+.h-screen {
+  height: 83vh !important;
 }

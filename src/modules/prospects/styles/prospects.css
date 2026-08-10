@@ -1,26 +1,25 @@
 .prospects-page {
-  padding: 24px 0;
-  min-height: 100vh;
-  background: #f8fafc;
+  padding: 2rem 0;
+  min-height: calc(100vh - 60px);
 }
 
-.prospects-page .container {
-  max-width: 1200px;
+.container {
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 2rem;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .page-header h1 {
+  font-size: 2rem;
+  color: #0A2540;
   margin: 0;
-  font-size: 32px;
-  color: #0a2540;
 }
 
 .page-header p {
@@ -51,7 +50,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .statistics-card {
@@ -103,154 +102,11 @@
 }
 
 .prospects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-  margin-bottom: 32px;
+  display: none;
 }
 
 .prospect-card {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.prospect-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-}
-
-.prospect-name {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #0a2540;
-  flex: 1;
-  word-break: break-word;
-}
-
-.card-actions {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.btn-icon {
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 6px 10px;
-  border-radius: 6px;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-icon.edit {
-  color: #0a2540;
-}
-
-.btn-icon.edit:hover {
-  background: #dbeafe;
-  transform: scale(1.1);
-}
-
-.btn-icon.delete {
-  color: #dc2626;
-}
-
-.btn-icon.delete:hover {
-  background: #fee2e2;
-  transform: scale(1.1);
-}
-
-.card-badges {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
-  white-space: nowrap;
-}
-
-.badge.status {
-  background: #3b82f6;
-}
-
-.badge.origem {
-  background: #ff6b00;
-}
-
-.card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-}
-
-.info-item .icon {
-  font-size: 16px;
-  flex-shrink: 0;
-}
-
-.info-item .value {
-  color: #1e293b;
-  word-break: break-word;
-  flex: 1;
-}
-
-.card-observations {
-  background: #f1f5f9;
-  border-left: 3px solid #10b981;
-  padding: 12px;
-  border-radius: 6px;
-  margin-top: 8px;
-}
-
-.observations-text {
-  margin: 0;
-  font-size: 13px;
-  color: #475569;
-  line-height: 1.5;
-  word-break: break-word;
-}
-
-.card-footer {
-  padding-top: 12px;
-  border-top: 1px solid #e2e8f0;
-  text-align: right;
-}
-
-.creation-date {
-  color: #94a3b8;
-  font-size: 12px;
+  display: none;
 }
 
 .loading-state,
@@ -297,7 +153,7 @@
   justify-content: center;
   align-items: center;
   gap: 12px;
-  margin: 32px 0;
+  margin: 2rem 0;
   flex-wrap: wrap;
 }
 
@@ -365,11 +221,201 @@
   text-align: center;
   color: #64748b;
   font-size: 14px;
-  margin-top: 16px;
+  margin-top: 1rem;
 }
 
 .pagination-info p {
   margin: 0;
+}
+
+/* Tabela de Prospects */
+.prospects-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.prospects-table thead {
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.prospects-table th {
+  padding: 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-right: 1px solid #e2e8f0;
+}
+
+.prospects-table th:last-child {
+  border-right: none;
+}
+
+.prospects-table tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.2s;
+}
+
+.prospects-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.prospects-table td {
+  padding: 16px;
+  font-size: 14px;
+  color: #1e293b;
+  border-right: 1px solid #e2e8f0;
+}
+
+.prospects-table td:last-child {
+  border-right: none;
+}
+
+/* Status Badge Styles */
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+.border-blue-200 {
+  border-color: #bfdbfe;
+}
+
+.bg-amber-50 {
+  background-color: #fffbeb;
+}
+
+.text-amber-800 {
+  color: #92400e;
+}
+
+.border-amber-200 {
+  border-color: #fde68a;
+}
+
+.bg-purple-50 {
+  background-color: #faf5ff;
+}
+
+.text-purple-800 {
+  color: #6b21a8;
+}
+
+.border-purple-200 {
+  border-color: #e9d5ff;
+}
+
+.bg-green-50 {
+  background-color: #f0fdf4;
+}
+
+.text-green-800 {
+  color: #166534;
+}
+
+.border-green-200 {
+  border-color: #bbf7d0;
+}
+
+.bg-red-50 {
+  background-color: #fef2f2;
+}
+
+.text-red-800 {
+  color: #991b1b;
+}
+
+.border-red-200 {
+  border-color: #fecaca;
+}
+
+.bg-gray-50 {
+  background-color: #f9fafb;
+}
+
+.text-gray-800 {
+  color: #1f2937;
+}
+
+.border-gray-200 {
+  border-color: #e5e7eb;
+}
+
+.prospects-table .acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.prospects-table .btn-icon {
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.prospects-table .btn-icon.edit {
+  color: #0a2540;
+}
+
+.prospects-table .btn-icon.edit:hover {
+  background: #dbeafe;
+}
+
+.prospects-table .btn-icon.delete {
+  color: #dc2626;
+}
+
+.prospects-table .btn-icon.delete:hover {
+  background: #fee2e2;
+}
+
+@media (max-width: 1024px) {
+  .prospects-table {
+    font-size: 12px;
+  }
+
+  .prospects-table th,
+  .prospects-table td {
+    padding: 12px 8px;
+  }
+
+  .prospects-table .acoes {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .prospects-table {
+    font-size: 11px;
+  }
+
+  .prospects-table th,
+  .prospects-table td {
+    padding: 10px 6px;
+  }
+
+  .prospects-table th {
+    font-size: 11px;
+  }
+
+  .prospects-table .btn-icon {
+    font-size: 14px;
+    padding: 4px 6px;
+  }
 }
 
 @media (max-width: 1024px) {

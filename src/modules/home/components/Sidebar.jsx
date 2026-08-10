@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BarChart3, FileCheck, Users, Cog, Sparkles, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
+import { BarChart3, FileCheck, Users, Cog, Sparkles, DollarSign, ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../../assets/kealabs_logo_strategic.png';
 import '../styles/home.css';
@@ -13,6 +13,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3, path: '/home/dashboard', color: '#10B981' },
     { id: 'orcamentos', label: 'Orçamentos', icon: FileCheck, path: '/home/orcamentos', color: '#00B4D8' },
     { id: 'prospect', label: 'Prospect', icon: Users, path: '/home/prospect', color: '#FF6B00' },
+    { id: 'financeiro', label: 'Financeiro', icon: DollarSign, path: '/home/financeiro', color: '#8B5CF6' },
     { id: 'crm', label: 'CRM', icon: Cog, path: '/home/crm', color: '#0A2540' },
     { id: 'agent', label: 'Agent Kea', icon: Sparkles, path: '/home/agent', color: '#10B981' },
   ];
@@ -131,6 +132,51 @@ const Sidebar = ({ isCollapsed, setIsCollapsed }) => {
               </button>
             );
           })}
+          
+          {/* Separator */}
+          <div style={{ height: '1px', backgroundColor: '#E2E8F0', margin: '1rem 0' }} />
+          
+          {/* Settings Item */}
+          <button
+            onClick={() => handleNavigate('/home/configuracoes')}
+            className={`menu-item ${isActive('/home/configuracoes') ? 'active' : ''}`}
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: isCollapsed ? 'center' : 'flex-start',
+              gap: '0.75rem',
+              paddingLeft: '1rem',
+              paddingRight: '1rem',
+              paddingTop: '0.75rem',
+              paddingBottom: '0.75rem',
+              borderRadius: '0.5rem',
+              transition: 'all 0.2s ease',
+              color: isActive('/home/configuracoes') ? 'white' : '#64748B',
+              backgroundColor: isActive('/home/configuracoes') ? '#6B7280' : 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              fontWeight: '500',
+              boxShadow: isActive('/home/configuracoes') ? '0 2px 8px rgba(0, 0, 0, 0.12)' : 'none'
+            }}
+            title="Configurações"
+            onMouseEnter={(e) => {
+              if (!isActive('/home/configuracoes')) {
+                e.target.style.backgroundColor = '#F1F5F9';
+                e.target.style.color = '#0A2540';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isActive('/home/configuracoes')) {
+                e.target.style.backgroundColor = 'transparent';
+                e.target.style.color = '#64748B';
+              }
+            }}
+          >
+            <Cog size={20} style={{ flexShrink: 0, color: isActive('/home/configuracoes') ? 'white' : '#6B7280', strokeWidth: 2 }} />
+            {!isCollapsed && <span>Configurações</span>}
+          </button>
         </nav>
 
         {/* Footer */}

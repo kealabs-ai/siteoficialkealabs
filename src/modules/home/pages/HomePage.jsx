@@ -7,6 +7,9 @@ import DashboardPage from './DashboardPage';
 import OrcamentosPage from '../../orcamentos/pages/OrcamentosPage';
 import ProspectsPage from '../../prospects/pages/ProspectsPage';
 import AgentPage from '../../agent/AgentPage';
+import FinanceiroPage from '../../financeiro/pages/FinanceiroPage';
+import ClientsPage from '../../crm/pages/ClientsPage';
+import ConfiguracoesPage from '../../configuracoes/pages/ConfiguracoesPage';
 import '../styles/home.css';
 
 const HomePage = () => {
@@ -16,15 +19,17 @@ const HomePage = () => {
   return (
     <div className="home-container">
       <Sidebar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
-      <div className="home-main" style={{ marginLeft: isCollapsed ? '80px' : '256px', transition: 'margin-left 0.3s ease' }}>
+      <div className="home-main" style={{ marginLeft: isCollapsed ? '80px' : '256px' }}>
         <Topbar userName={userName} isCollapsed={isCollapsed} />
         <main className="home-content">
           <Routes>
-            <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/orcamentos" element={<OrcamentosPage />} />
             <Route path="/prospect" element={<ProspectsPage />} />
-            <Route path="/crm" element={<CRMContent />} />
+            <Route path="/financeiro" element={<FinanceiroPage />} />
+            <Route path="/crm" element={<ClientsPage />} />
             <Route path="/agent" element={<AgentPage />} />
+            <Route path="/configuracoes" element={<ConfiguracoesPage />} />
             <Route path="/" element={<DashboardPage />} />
           </Routes>
         </main>

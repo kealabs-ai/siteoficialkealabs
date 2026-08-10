@@ -36,7 +36,6 @@
   border: 2px solid #E2E8F0;
   transition: all 0.3s;
   position: relative;
-  overflow: hidden;
 }
 
 .solucao-card::before {

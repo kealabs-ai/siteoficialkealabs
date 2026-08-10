@@ -13,12 +13,29 @@ const Topbar = ({ userName: initialUserName, isCollapsed }) => {
     const fetchUserData = async () => {
       try {
         const user = await getCurrentUser();
-        if (user && user.name) {
-          setUserName(user.name);
-          localStorage.setItem('userName', user.name);
+        if (user) {
+          if (user.name) {
+            setUserName(user.name);
+            localStorage.setItem('userName', user.name);
+          } else if (user.email) {
+            const name = user.email.split('@')[0];
+            setUserName(name);
+            localStorage.setItem('userName', name);
+          }
+        } else {
+          // Usar nome do localStorage como fallback
+          const storedName = localStorage.getItem('userName');
+          if (storedName) {
+            setUserName(storedName);
+          }
         }
       } catch (error) {
         console.error('Erro ao buscar dados do usuário:', error);
+        // Usar nome do localStorage como fallback
+        const storedName = localStorage.getItem('userName');
+        if (storedName) {
+          setUserName(storedName);
+        }
       } finally {
         setLoading(false);
       }

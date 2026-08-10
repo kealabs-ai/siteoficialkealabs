@@ -22,7 +22,12 @@ export const useAgentChat = () => {
       const sessionsList = Array.isArray(data) ? data : data?.data || [];
       setSessions(sessionsList);
     } catch (err) {
-      console.error('Erro ao carregar sessões:', err);
+      if (err.response?.status === 404) {
+        console.log('Endpoint /chat/sessions não disponível');
+        setSessions([]);
+      } else {
+        console.error('Erro ao carregar sessões:', err);
+      }
     }
   };
 
@@ -65,20 +70,32 @@ export const useAgentChat = () => {
       
       console.log('Criando sessão:', { modelo: model, temChave: !!apiKey });
       
-      const { data } = await api.post('/chat/sessions', {
-        agent_name: agent?.name || 'Agent Kea',
-        agent_role: agent?.role || 'Assistente IA',
-        agent_tone: agent?.tone || 'friendly',
-        llm_model: model,
-        api_key: apiKey,
-        system_prompt: systemPrompt
-      });
-      
-      const newSessionId = data.id || data.session_id;
-      setActiveSessionId(newSessionId);
-      localStorage.setItem('keaflow-chat-session-id', newSessionId);
-      setMessages([]);
-      await loadSessions();
+      try {
+        const { data } = await api.post('/chat/sessions', {
+          agent_name: agent?.name || 'Agent Kea',
+          agent_role: agent?.role || 'Assistente IA',
+          agent_tone: agent?.tone || 'friendly',
+          llm_model: model,
+          api_key: apiKey,
+          system_prompt: systemPrompt
+        });
+        
+        const newSessionId = data.id || data.session_id;
+        setActiveSessionId(newSessionId);
+        localStorage.setItem('keaflow-chat-session-id', newSessionId);
+        setMessages([]);
+        await loadSessions();
+      } catch (err) {
+        if (err.response?.status === 404) {
+          console.log('Endpoint /chat/sessions não disponível, usando sessão local');
+          const localSessionId = 'local-' + Date.now();
+          setActiveSessionId(localSessionId);
+          localStorage.setItem('keaflow-chat-session-id', localSessionId);
+          setMessages([]);
+        } else {
+          throw err;
+        }
+      }
     } catch (err) {
       console.error('Erro ao criar sessão:', err);
       setError('Erro ao criar nova sessão');
