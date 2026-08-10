@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.DEV ? '/asaas-api/v3' : 'https://api-sandbox.asaas.com/v3';
+const API_BASE_URL = 'https://api-sandbox.asaas.com/v3';
 
 const getApiKey = () => {
   const apiKey = import.meta.env.VITE_ASAAS_API_KEY;
@@ -14,7 +14,6 @@ const getHeaders = (contentType = 'application/json') => {
   const apiKey = getApiKey();
   
   return {
-    'User-Agent': 'Kealabs/1.0.0',
     'accept': 'application/json',
     'content-type': contentType,
     'access_token': apiKey
@@ -28,10 +27,17 @@ export const crmApi = {
       const url = `${API_BASE_URL}/customers`;
       const headers = getHeaders();
       
+      console.log('Requisição para:', url);
+      console.log('Headers:', { ...headers, access_token: '***' });
+      
       const response = await fetch(url, {
         method: 'GET',
-        headers: headers
+        headers: headers,
+        mode: 'cors'
       });
+
+      console.log('Status:', response.status);
+      console.log('Content-Type:', response.headers.get('content-type'));
 
       if (!response.ok) {
         const contentType = response.headers.get('content-type');
@@ -47,6 +53,7 @@ export const crmApi = {
       }
 
       const data = await response.json();
+      console.log('Dados recebidos:', data);
       return {
         success: true,
         data: data.data || []
