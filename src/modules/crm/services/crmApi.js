@@ -1,12 +1,14 @@
 const API_BASE_URL = import.meta.env.DEV ? '/api/asaas' : '/api/asaas';
 
 const getApiKey = () => {
-  let apiKey = import.meta.env.VITE_ASAAS_API_KEY;
-  
+  let apiKey = import.meta.env.VITE_ASAAS_API_KEY || import.meta.env.ASAAS_API_KEY || '';
+
   if (!apiKey) {
     throw new Error('API Key não configurada no .env');
   }
-  
+
+  apiKey = apiKey.trim();
+
   // Remover $ do início do token se existir
   if (apiKey.startsWith('$')) {
     apiKey = apiKey.substring(1);
@@ -16,9 +18,13 @@ const getApiKey = () => {
 };
 
 const getHeaders = (contentType = 'application/json') => {
+  const apiKey = getApiKey();
+
   return {
     'accept': 'application/json',
-    'content-type': contentType
+    'content-type': contentType,
+    'access_token': apiKey,
+    'Authorization': `Bearer ${apiKey}`
   };
 };
 
