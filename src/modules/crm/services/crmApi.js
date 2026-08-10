@@ -1,10 +1,15 @@
 const API_BASE_URL = import.meta.env.DEV ? '/api/asaas' : '/api/asaas';
 
 const getApiKey = () => {
-  const apiKey = import.meta.env.VITE_ASAAS_API_KEY;
+  let apiKey = import.meta.env.VITE_ASAAS_API_KEY;
   
   if (!apiKey) {
     throw new Error('API Key não configurada no .env');
+  }
+  
+  // Remover $ do início do token se existir
+  if (apiKey.startsWith('$')) {
+    apiKey = apiKey.substring(1);
   }
 
   return apiKey;

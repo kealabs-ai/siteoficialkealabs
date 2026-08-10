@@ -26,19 +26,23 @@ app.all('/api/asaas/*', async (req, res) => {
   try {
     const asaasPath = req.path.replace('/api/asaas', '');
     const asaasUrl = `https://api-sandbox.asaas.com/v3${asaasPath}`;
-    const asaasToken = process.env.VITE_ASAAS_API_KEY || process.env.ASAAS_API_KEY;
+    let asaasToken = process.env.VITE_ASAAS_API_KEY || process.env.ASAAS_API_KEY;
+    
+    // Remover $ do início do token se existir
+    if (asaasToken?.startsWith('$')) {
+      asaasToken = asaasToken.substring(1);
+    }
 
     console.log(`Proxy request: ${req.method} ${asaasUrl}`);
 
     if (!asaasToken) {
-      console.error('Token Asaas não configurado');
-      return res.status(400).json({ error: 'Token Asaas não configurado' });
+      console.error('Token Asaas nao configurado');
+      return res.status(400).json({ error: 'Token Asaas nao configurado' });
     }
 
     const options = {
       method: req.method,
       headers: {
-        'User-Agent': 'Kealabs/1.0.0',
         'accept': 'application/json',
         'access_token': asaasToken,
       },
@@ -55,11 +59,26 @@ app.all('/api/asaas/*', async (req, res) => {
     }
 
     console.log(`Fetching: ${finalUrl}`);
+    console.log(`Token: ${asaasToken.substring(0, 20)}...`);
 
     const response = await fetch(finalUrl, options);
-    const data = await response.json();
-
+    const contentType = response.headers.get('content-type');
+    
     console.log(`Response status: ${response.status}`);
+    console.log(`Response content-type: ${contentType}`);
+
+    if (!contentType?.includes('application/json')) {
+      const text = await response.text();
+      console.error('Resposta nao-JSON:', text.substring(0, 500));
+      return res.status(response.status).json({ 
+        error: 'Resposta invalida do servidor Asaas',
+        status: response.status,
+        contentType: contentType
+      });
+    }
+
+    const data = await response.json();
+    console.log(`Response data:`, JSON.stringify(data).substring(0, 200));
 
     res.status(response.status).json(data);
   } catch (error) {
