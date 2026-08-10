@@ -34,8 +34,24 @@ export const crmApi = {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.errors?.[0]?.detail || `Erro ao buscar clientes: ${response.status}`);
+        const contentType = response.headers.get('content-type');
+        let errorData;
+        
+        if (contentType?.includes('application/json')) {
+          errorData = await response.json();
+          throw new Error(errorData.errors?.[0]?.detail || `Erro ao buscar clientes: ${response.status}`);
+        } else {
+          const text = await response.text();
+          console.error('Resposta não-JSON:', text.substring(0, 200));
+          throw new Error(`Erro ${response.status}: Resposta inválida do servidor`);
+        }
+      }
+
+      const contentType = response.headers.get('content-type');
+      if (!contentType?.includes('application/json')) {
+        const text = await response.text();
+        console.error('Resposta não-JSON:', text.substring(0, 200));
+        throw new Error('Resposta do servidor não é JSON válido');
       }
 
       const data = await response.json();
