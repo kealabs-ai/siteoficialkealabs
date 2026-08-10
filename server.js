@@ -26,7 +26,8 @@ app.all('/api/asaas/*', async (req, res) => {
   try {
     const asaasPath = req.path.replace('/api/asaas', '');
     const asaasUrl = `https://api-sandbox.asaas.com/v3${asaasPath}`;
-    let asaasToken = process.env.VITE_ASAAS_API_KEY || process.env.ASAAS_API_KEY;
+    const incomingToken = req.headers.access_token || req.headers.authorization?.replace(/^Bearer\s+/i, '');
+    let asaasToken = incomingToken || process.env.VITE_ASAAS_API_KEY || process.env.ASAAS_API_KEY;
     
     // Remover $ do início do token se existir
     if (asaasToken?.startsWith('$')) {
