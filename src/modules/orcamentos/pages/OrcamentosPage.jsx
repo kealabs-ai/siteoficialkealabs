@@ -8,6 +8,7 @@ const OrcamentosPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [orcamentos, setOrcamentos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editingOrcamento, setEditingOrcamento] = useState(null);
 
   useEffect(() => {
     fetchOrcamentos();
@@ -39,16 +40,37 @@ const OrcamentosPage = () => {
         }));
       
       setOrcamentos(mappedOrcamentos);
+      setLoading(false);
     } catch (err) {
-      console.error('Erro ao buscar orçamentos:', err);
+      if (err.response?.status === 404) {
+        setOrcamentos([]);
+      } else {
+        console.error('Erro ao buscar orçamentos:', err);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleOrcamentoCreated = (novoOrcamento) => {
-    setOrcamentos([novoOrcamento, ...orcamentos]);
+  const handleEdit = (orcamento) => {
+    setEditingOrcamento(orcamento);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
     setShowModal(false);
+    setEditingOrcamento(null);
+  };
+
+  const handleOrcamentoCreated = (novoOrcamento) => {
+    if (editingOrcamento) {
+      // Atualizar orçamento existente
+      setOrcamentos(orcamentos.map(o => o.id === editingOrcamento.id ? novoOrcamento : o));
+    } else {
+      // Adicionar novo orçamento
+      setOrcamentos([novoOrcamento, ...orcamentos]);
+    }
+    handleCloseModal();
   };
 
   const handleDelete = async (id) => {
@@ -69,7 +91,10 @@ const OrcamentosPage = () => {
           <h1>Orçamentos</h1>
           <button 
             className="btn-primary"
-            onClick={() => setShowModal(true)}
+            onClick={() => {
+              setEditingOrcamento(null);
+              setShowModal(true);
+            }}
           >
             + Criar Novo Orçamento
           </button>
@@ -80,6 +105,7 @@ const OrcamentosPage = () => {
         ) : (
           <OrcamentosTable 
             orcamentos={orcamentos} 
+            onEdit={handleEdit}
             onDelete={handleDelete}
             onRefresh={fetchOrcamentos}
           />
@@ -88,7 +114,8 @@ const OrcamentosPage = () => {
 
       {showModal && (
         <NovoOrcamentoModal
-          onClose={() => setShowModal(false)}
+          orcamento={editingOrcamento}
+          onClose={handleCloseModal}
           onSuccess={handleOrcamentoCreated}
         />
       )}

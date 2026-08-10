@@ -1,26 +1,25 @@
 .orcamentos-page {
-  padding: 24px 0;
-  min-height: 100vh;
-  background: #f8fafc;
+  padding: 2rem 0;
+  min-height: calc(100vh - 60px);
 }
 
-.orcamentos-page .container {
-  max-width: 1200px;
+.container {
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 2rem;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 32px;
+  margin-bottom: 2rem;
 }
 
 .page-header h1 {
+  font-size: 2rem;
+  color: #0A2540;
   margin: 0;
-  font-size: 32px;
-  color: #0a2540;
 }
 
 .btn-primary {
@@ -41,21 +40,18 @@
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-.table-container {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 .orcamentos-table {
   width: 100%;
   border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .orcamentos-table thead {
   background: #f1f5f9;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .orcamentos-table th {
@@ -81,6 +77,67 @@
   padding: 16px;
   font-size: 14px;
   color: #1e293b;
+}
+
+/* Status Badge Styles */
+.bg-yellow-50 {
+  background-color: #fefce8;
+}
+
+.text-yellow-800 {
+  color: #713f12;
+}
+
+.border-yellow-200 {
+  border-color: #fef08a;
+}
+
+.bg-green-50 {
+  background-color: #f0fdf4;
+}
+
+.text-green-800 {
+  color: #166534;
+}
+
+.border-green-200 {
+  border-color: #bbf7d0;
+}
+
+.bg-red-50 {
+  background-color: #fef2f2;
+}
+
+.text-red-800 {
+  color: #991b1b;
+}
+
+.border-red-200 {
+  border-color: #fecaca;
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+.border-blue-200 {
+  border-color: #bfdbfe;
+}
+
+.bg-gray-50 {
+  background-color: #f9fafb;
+}
+
+.text-gray-800 {
+  color: #1f2937;
+}
+
+.border-gray-200 {
+  border-color: #e5e7eb;
 }
 
 .orcamentos-table .acoes {
@@ -116,10 +173,10 @@
 
 .empty-state {
   background: white;
-  border-radius: 12px;
+  border-radius: 8px;
   padding: 60px 20px;
   text-align: center;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .empty-state p {
@@ -134,6 +191,86 @@
   margin-bottom: 8px;
 }
 
+/* Paginação */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-top: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 0 0 8px 8px;
+}
+
+.pagination-info {
+  font-size: 14px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a2540;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-pages {
+  display: flex;
+  gap: 4px;
+}
+
+.pagination-page {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid #e2e8f0;
+  background: white;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #0a2540;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination-page:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.pagination-page.active {
+  background: #10b981;
+  color: white;
+  border-color: #10b981;
+}
+
+.pagination-page.active:hover {
+  background: #059669;
+  border-color: #059669;
+}
+
 @media (max-width: 768px) {
   .page-header {
     flex-direction: column;
@@ -142,7 +279,7 @@
   }
 
   .page-header h1 {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .btn-primary {
@@ -160,5 +297,26 @@
 
   .orcamentos-table .acoes {
     flex-direction: column;
+  }
+
+  .pagination {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .pagination-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .pagination-pages {
+    flex-wrap: wrap;
+  }
+
+  .pagination-page {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
   }
 }

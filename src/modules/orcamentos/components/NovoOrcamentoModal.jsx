@@ -7,7 +7,7 @@ import SecaoTipoServico from './SecaoTipoServico';
 import SecaoModulos from './SecaoModulos';
 import '../styles/modal.css';
 
-const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
+const NovoOrcamentoModal = ({ onClose, onSuccess, orcamento }) => {
   const { settings } = useSettings();
   const [loading, setLoading] = useState(false);
   const [resultado, setResultado] = useState(null);
@@ -38,11 +38,41 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
     bunnyPlano: null
   });
 
+  useEffect(() => {
+    if (orcamento) {
+      setFormData({
+        prospectId: orcamento.prospectId || '',
+        nome: orcamento.nome || '',
+        email: orcamento.email || '',
+        cpfCnpj: orcamento.cpfCnpj || '',
+        telefone: orcamento.telefone || '',
+        parcelas: orcamento.parcelas || 1,
+        servicos: orcamento.servicos || {
+          web: { ativo: false, menus: 1, asaas: false },
+          miniSite: { ativo: false, paginas: 1, instagram: false, whatsapp: false },
+          bi: { ativo: false, fontes: [], complexidade: 'standard' },
+          aiAgent: { ativo: false, plano: 'free', agentes: 1, rag: false, voz: false }
+        },
+        modulos: orcamento.modulos || {
+          n8n: false,
+          whatsapp: false,
+          agileSetup: false,
+          consultor: false,
+          pandaVideos: false,
+          bunnycdn: false,
+          mentoringHoras: 0,
+          hospedagem: []
+        },
+        pandaPlano: orcamento.pandaPlano || null,
+        bunnyPlano: orcamento.bunnyPlano || null
+      });
+    }
+  }, [orcamento]);
+
   const calcularPreco = () => {
     let total = 0;
     const { servicos, modulos } = formData;
 
-    // Serviços
     if (servicos.web.ativo) total += 2000 + (servicos.web.menus - 1) * 300;
     if (servicos.web.asaas) total += 500;
     
@@ -68,7 +98,6 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
       if (servicos.aiAgent.voz) total += 600;
     }
 
-    // Módulos
     if (modulos.n8n) total += settings.moduleN8n || 500;
     if (modulos.whatsapp) total += settings.moduleWhatsapp || 300;
     if (modulos.agileSetup) total += settings.moduleAgileSetup || 1200;
@@ -77,7 +106,6 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
     if (modulos.bunnycdn) total += 200;
     total += modulos.mentoringHoras * (settings.moduleMentoringHour || 150);
 
-    // Hospedagem
     const hospedagemPrecos = {
       'compartilhada-single': 50,
       'compartilhada-premium': 100,
@@ -90,7 +118,6 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
       total += hospedagemPrecos[h] || 0;
     });
 
-    // Planos condicionais
     if (modulos.pandaVideos && formData.pandaPlano) {
       const pandaPrecos = { starter: 97, pro: 197, scale: 397 };
       total += pandaPrecos[formData.pandaPlano] || 0;
@@ -115,16 +142,27 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
       const payload = {
         ...formData,
         setupLiquido: calcularPreco(),
-        mdrPercentage: settings.mdrPercentage,
-        installmentLimit: settings.installmentLimit,
-        commissionRate: settings.commissionRate
+        totalCobrado: calcularPreco() * (1 + ((settings.mdrPercentage || 0))),
+        mdrPercentage: settings.mdrPercentage || 0,
+        installmentLimit: settings.installmentLimit || 12,
+        commissionRate: settings.commissionRate || 0
       };
 
-      const { data } = await api.post('/quotes', payload);
-      setResultado(data);
+      if (orcamento) {
+        await api.put(`/quotes/${orcamento.id}`, payload);
+      } else {
+        await api.post('/quotes', payload);
+      }
+      
+      const novoOrcamento = {
+        id: orcamento?.id || String(Date.now()),
+        ...payload
+      };
+      
+      setResultado(novoOrcamento);
     } catch (err) {
-      console.error('Erro ao criar orçamento:', err);
-      alert('Erro ao criar orçamento');
+      console.error('Erro ao salvar orçamento:', err);
+      alert('Erro ao salvar orçamento');
     } finally {
       setLoading(false);
     }
@@ -153,16 +191,16 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
     return (
       <div className="modal-overlay" onClick={onClose}>
         <div className="modal-content resultado" onClick={e => e.stopPropagation()}>
-          <h2>Orçamento Gerado com Sucesso!</h2>
+          <h2>{orcamento ? 'Orçamento Atualizado!' : 'Orçamento Gerado com Sucesso!'}</h2>
           <div className="resultado-info">
             <div className="info-item">
               <span>Setup Líquido:</span>
-              <strong>R$ {resultado.setupLiquido?.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
+              <strong>R$ {(resultado.setupLiquido || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</strong>
             </div>
             <div className="info-item">
               <span>Cobrar do Cliente:</span>
               <strong>
-                {formData.parcelas}× R$ {(resultado.totalCobrado / formData.parcelas).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                {formData.parcelas}× R$ {((resultado.totalCobrado || 0) / formData.parcelas).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
               </strong>
             </div>
           </div>
@@ -170,8 +208,10 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
             <button className="btn-secondary" onClick={handleDownloadPDF}>
               📄 Baixar PDF
             </button>
-            <button className="btn-primary" onClick={() => window.location.href = '/'}>
-              Ver Dashboard →
+            <button className="btn-primary" onClick={() => {
+              onSuccess(resultado);
+            }}>
+              ✓ Confirmar
             </button>
           </div>
           <button className="btn-close" onClick={onClose}>Fechar</button>
@@ -184,7 +224,7 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Novo Orçamento</h2>
+          <h2>{orcamento ? 'Editar Orçamento' : 'Novo Orçamento'}</h2>
           <button className="btn-close-icon" onClick={onClose}>✕</button>
         </div>
 
@@ -217,7 +257,7 @@ const NovoOrcamentoModal = ({ onClose, onSuccess }) => {
               Cancelar
             </button>
             <button type="submit" className="btn-primary" disabled={loading}>
-              {loading ? 'Gerando...' : '⚡ Gerar Orçamento'}
+              {loading ? (orcamento ? 'Atualizando...' : 'Gerando...') : (orcamento ? '💾 Atualizar Orçamento' : '⚡ Gerar Orçamento')}
             </button>
           </div>
         </form>

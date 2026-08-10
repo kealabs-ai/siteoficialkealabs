@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import InputMask from 'react-input-mask';
 import '../styles/modal.css';
 
 const ProspectModal = ({ prospect, onClose, onSave }) => {
@@ -72,26 +73,32 @@ const ProspectModal = ({ prospect, onClose, onSave }) => {
             </div>
             <div className="form-group">
               <label>Telefone</label>
-              <input
-                type="tel"
+              <InputMask
+                mask="(99) 99999-9999"
+                maskChar="_"
                 name="telefone"
                 value={formData.telefone}
                 onChange={handleChange}
                 placeholder="(11) 99999-9999"
-              />
+              >
+                {(inputProps) => <input {...inputProps} type="tel" />}
+              </InputMask>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
               <label>CPF / CNPJ</label>
-              <input
-                type="text"
+              <InputMask
+                mask="999.999.999-99"
+                maskChar="_"
                 name="cpfCnpj"
                 value={formData.cpfCnpj}
                 onChange={handleChange}
                 placeholder="000.000.000-00"
-              />
+              >
+                {(inputProps) => <input {...inputProps} type="text" />}
+              </InputMask>
             </div>
             <div className="form-group">
               <label>Empresa</label>

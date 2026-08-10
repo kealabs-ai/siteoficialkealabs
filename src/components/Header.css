@@ -89,6 +89,14 @@
   color: var(--verde-esmeralda);
 }
 
+.nav-menu a:active {
+  color: var(--verde-esmeralda);
+}
+
+.nav-menu a:active::after {
+  width: 100%;
+}
+
 .btn-area-cliente {
   background: linear-gradient(135deg, var(--verde-esmeralda), #059669);
   color: white !important;

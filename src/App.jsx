@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './styles/global.css';
+import useSmoothScroll from './hooks/useSmoothScroll';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Solucoes from './components/Solucoes';
@@ -14,11 +15,11 @@ import LoginPage from './modules/login/pages/LoginPage';
 import DashboardPage from './modules/dashboard/pages/DashboardPage';
 import UsuariosPage from './modules/usuarios/pages/UsuariosPage';
 import RelatoriosPage from './modules/relatorios/pages/RelatoriosPage';
-import ConfiguracoesPage from './modules/configuracoes/pages/ConfiguracoesPage';
 import HomePage from './modules/home/pages/HomePage';
 import OrcamentosPage from './modules/orcamentos/pages/OrcamentosPage';
 
 function App() {
+  useSmoothScroll();
   return (
     <Router>
       <Routes>
@@ -62,7 +63,7 @@ function App() {
           path="/configuracoes"
           element={
             <ProtectedRoute>
-              <ConfiguracoesPage />
+              <HomePage />
             </ProtectedRoute>
           }
         />

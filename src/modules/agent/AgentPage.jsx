@@ -5,7 +5,6 @@ import ChatSidebar from './components/ChatSidebar';
 import ChatHeader from './components/ChatHeader';
 import ChatMessages from './components/ChatMessages';
 import ChatInput from './components/ChatInput';
-import './agent.css';
 
 const AgentPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -30,7 +29,7 @@ const AgentPage = () => {
   };
 
   return (
-    <div className="agent-page">
+    <div className="flex h-screen bg-gray-50 w-full max-w-full overflow-hidden">
       <ChatSidebar
         sessions={sessions}
         activeSessionId={activeSessionId}
@@ -40,7 +39,7 @@ const AgentPage = () => {
         isOpen={sidebarOpen}
       />
 
-      <div className="chat-main">
+      <div className={`flex-1 flex flex-col overflow-hidden w-full transition-all duration-300 ${sidebarOpen ? 'ml-0' : 'ml-0'}`}>
         <ChatHeader
           onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
           agentProfile={agentProfile}

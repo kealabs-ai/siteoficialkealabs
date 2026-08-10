@@ -69,7 +69,10 @@ const DEFAULT_AGENT = {
 
 export const useSettings = () => {
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [settingsChanges, setSettingsChanges] = useState({});
   const [agent, setAgent] = useState(DEFAULT_AGENT);
+  const [agentChanges, setAgentChanges] = useState({});
+  const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
@@ -78,6 +81,7 @@ export const useSettings = () => {
   useEffect(() => {
     loadSettings();
     loadAgent();
+    loadAgents();
   }, []);
 
   const loadSettings = async () => {
@@ -87,16 +91,24 @@ export const useSettings = () => {
         setSettings(JSON.parse(cached));
       }
 
-      const { data } = await api.get('/settings');
-      const settingsList = Array.isArray(data) ? data : data?.data || [];
-      
-      const merged = { ...DEFAULT_SETTINGS };
-      settingsList.forEach(item => {
-        merged[item.setting_key] = item.setting_value;
-      });
-      
-      setSettings(merged);
-      localStorage.setItem('keaflow-settings', JSON.stringify(merged));
+      try {
+        const { data } = await api.get('/settings');
+        const settingsList = Array.isArray(data) ? data : data?.data || [];
+        
+        const merged = { ...DEFAULT_SETTINGS };
+        settingsList.forEach(item => {
+          merged[item.setting_key] = item.setting_value;
+        });
+        
+        setSettings(merged);
+        localStorage.setItem('keaflow-settings', JSON.stringify(merged));
+      } catch (err) {
+        if (err.response?.status === 404) {
+          console.log('Endpoint /settings não disponível, usando valores padrão');
+        } else {
+          throw err;
+        }
+      }
     } catch (err) {
       console.error('Erro ao carregar settings:', err);
     }
@@ -111,11 +123,19 @@ export const useSettings = () => {
         setAgentId(cachedAgent.id);
       }
 
-      const { data } = await api.get('/agents/active');
-      if (data) {
-        setAgent(data);
-        setAgentId(data.id);
-        localStorage.setItem('keaflow-agent-profile', JSON.stringify(data));
+      try {
+        const { data } = await api.get('/agents/active');
+        if (data) {
+          setAgent(data);
+          setAgentId(data.id);
+          localStorage.setItem('keaflow-agent-profile', JSON.stringify(data));
+        }
+      } catch (err) {
+        if (err.response?.status === 404) {
+          console.log('Endpoint /agents/active não disponível, usando valores padrão');
+        } else {
+          throw err;
+        }
       }
     } catch (err) {
       console.error('Erro ao carregar agente:', err);
@@ -124,49 +144,112 @@ export const useSettings = () => {
     }
   };
 
-  const updateSetting = useCallback(async (key, value) => {
+  const loadAgents = useCallback(async () => {
     try {
-      setSettings(prev => ({ ...prev, [key]: value }));
-      localStorage.setItem('keaflow-settings', JSON.stringify({ ...settings, [key]: value }));
-      
-      await api.post('/settings/upsert', {
-        setting_key: key,
-        setting_value: value
-      });
+      const { data } = await api.get('/agents');
+      const agentsList = Array.isArray(data) ? data : data?.data || [];
+      setAgents(agentsList);
     } catch (err) {
-      console.error('Erro ao atualizar setting:', err);
+      if (err.response?.status === 404) {
+        console.log('Endpoint /agents não disponível');
+      } else {
+        console.error('Erro ao carregar agents:', err);
+      }
     }
-  }, [settings]);
+  }, []);
 
-  const updateAgent = useCallback(async (updates) => {
+  const updateSetting = useCallback((key, value) => {
+    setSettingsChanges(prev => ({ ...prev, [key]: value }));
+  }, []);
+
+  const savePricingSettings = useCallback(async () => {
     try {
-      const newAgent = { ...agent, ...updates };
-      setAgent(newAgent);
-      localStorage.setItem('keaflow-agent-profile', JSON.stringify(newAgent));
+      setSaving(true);
+      const newSettings = { ...settings, ...settingsChanges };
+      
+      await Promise.all(
+        Object.entries(settingsChanges).map(([key, value]) =>
+          api.post('/settings/upsert', {
+            setting_key: key,
+            setting_value: value
+          })
+        )
+      );
+      
+      setSettings(newSettings);
+      setSettingsChanges({});
+      localStorage.setItem('keaflow-settings', JSON.stringify(newSettings));
+      setSaveMessage('✅ Salvo!');
+      setTimeout(() => setSaveMessage(''), 2000);
+    } catch (err) {
+      console.error('Erro ao salvar settings:', err);
+      setSaveMessage('❌ Erro ao salvar');
+    } finally {
+      setSaving(false);
+    }
+  }, [settings, settingsChanges]);
 
+  const cancelPricingChanges = useCallback(() => {
+    setSettingsChanges({});
+  }, []);
+
+  const updateAgent = useCallback((updates) => {
+    setAgentChanges(prev => ({ ...prev, ...updates }));
+  }, []);
+
+  const saveAgent = useCallback(async () => {
+    try {
+      setSaving(true);
+      const newAgent = { ...agent, ...agentChanges };
+      
       if (agentId) {
         await api.post('/agents/update', {
           id: agentId,
-          ...updates,
+          ...agentChanges,
           is_active: 1
         });
       } else {
         const { data } = await api.post('/agents', {
-          ...updates,
+          ...agentChanges,
           is_active: 1
         });
         setAgentId(data.id);
       }
+      
+      setAgent(newAgent);
+      setAgentChanges({});
+      localStorage.setItem('keaflow-agent-profile', JSON.stringify(newAgent));
+      setSaveMessage('✅ Salvo!');
+      setTimeout(() => setSaveMessage(''), 2000);
     } catch (err) {
-      console.error('Erro ao atualizar agente:', err);
+      console.error('Erro ao salvar agente:', err);
+      setSaveMessage('❌ Erro ao salvar');
+    } finally {
+      setSaving(false);
     }
-  }, [agent, agentId]);
+  }, [agent, agentChanges, agentId]);
+
+  const cancelAgentChanges = useCallback(() => {
+    setAgentChanges({});
+  }, []);
+
+  const selectAgent = useCallback((selectedAgent) => {
+    setAgent(selectedAgent);
+    setAgentId(selectedAgent.id);
+    setAgentChanges({});
+    localStorage.setItem('keaflow-agent-profile', JSON.stringify(selectedAgent));
+  }, []);
+
+  const createNewAgent = useCallback(() => {
+    setAgent(DEFAULT_AGENT);
+    setAgentId(null);
+    setAgentChanges({});
+  }, []);
 
   const saveLLMKeys = useCallback(async (keys) => {
     try {
       setSaving(true);
       
-      // Salvar cada chave como setting individual
       await Promise.all([
         api.post('/settings/upsert', { setting_key: 'llm_key_gemini', setting_value: keys.gemini || null }),
         api.post('/settings/upsert', { setting_key: 'llm_key_openai', setting_value: keys.openai || null }),
@@ -174,7 +257,6 @@ export const useSettings = () => {
         api.post('/settings/upsert', { setting_key: 'llm_key_groq', setting_value: keys.groq || null })
       ]);
       
-      // Atualizar settings locais com as chaves
       const newSettings = {
         ...settings,
         llm_key_gemini: keys.gemini,
@@ -207,23 +289,35 @@ export const useSettings = () => {
     setSettings(DEFAULT_SETTINGS);
     setAgent(DEFAULT_AGENT);
     setAgentId(null);
+    setSettingsChanges({});
+    setAgentChanges({});
     localStorage.removeItem('keaflow-settings');
     localStorage.removeItem('keaflow-agent-profile');
   };
 
   return {
     settings,
+    settingsChanges,
     agent,
+    agentChanges,
+    agents,
     agentId,
     loading,
     saving,
     saveMessage,
     updateSetting,
     updateAgent,
+    saveAgent,
+    cancelAgentChanges,
+    savePricingSettings,
+    cancelPricingChanges,
     saveLLMKeys,
     resetDefaults,
     loadSettings,
-    loadAgent
+    loadAgent,
+    loadAgents,
+    selectAgent,
+    createNewAgent
   };
 };
 

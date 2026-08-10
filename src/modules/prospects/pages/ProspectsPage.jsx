@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import useProspects from '../hooks/useProspects';
 import ProspectModal from '../components/ProspectModal';
-import ProspectCard from '../components/ProspectCard';
+import ProspectsTable from '../components/ProspectsTable';
 import StatisticsCard from '../components/StatisticsCard';
 import Pagination from '../components/Pagination';
 import '../styles/prospects.css';
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 5;
 
 const ProspectsPage = () => {
   const { prospects, loading, useMock, createProspect, updateProspect, deleteProspect } = useProspects();
@@ -47,7 +47,6 @@ const ProspectsPage = () => {
     const totalPages = getTotalPages();
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
-      // Scroll para o topo da lista
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -69,7 +68,7 @@ const ProspectsPage = () => {
       } else {
         await createProspect(formData);
       }
-      setCurrentPage(1); // Volta para primeira página
+      setCurrentPage(1);
       handleCloseModal();
     } catch (err) {
       console.error('Erro ao salvar prospect:', err);
@@ -81,7 +80,6 @@ const ProspectsPage = () => {
     if (window.confirm('Tem certeza que deseja remover este prospect?')) {
       try {
         await deleteProspect(id);
-        // Se ficou vazio na página atual, volta para página anterior
         const totalPages = getTotalPages();
         if (currentPage > totalPages && currentPage > 1) {
           setCurrentPage(currentPage - 1);
@@ -148,7 +146,7 @@ const ProspectsPage = () => {
           />
         </div>
 
-        {/* Prospects List */}
+        {/* Prospects Table */}
         {loading ? (
           <div className="loading-state">
             <p>Carregando...</p>
@@ -165,16 +163,11 @@ const ProspectsPage = () => {
           </div>
         ) : (
           <>
-            <div className="prospects-grid">
-              {paginatedProspects.map(prospect => (
-                <ProspectCard
-                  key={prospect.id}
-                  prospect={prospect}
-                  onEdit={() => handleOpenModal(prospect)}
-                  onDelete={() => handleDeleteProspect(prospect.id)}
-                />
-              ))}
-            </div>
+            <ProspectsTable
+              prospects={paginatedProspects}
+              onEdit={handleOpenModal}
+              onDelete={handleDeleteProspect}
+            />
 
             {/* Pagination */}
             {totalPages > 1 && (
