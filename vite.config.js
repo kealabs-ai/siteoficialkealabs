@@ -16,6 +16,14 @@ export default defineConfig({
         proxyTimeout: 60000,
         ws: true,
         secure: false
+      },
+      '/api/asaas': {
+        target: 'https://api-sandbox.asaas.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/asaas/, ''),
+        timeout: 60000,
+        proxyTimeout: 60000,
+        secure: false
       }
     }
   }
