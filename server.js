@@ -25,7 +25,7 @@ app.get('/api/health', (req, res) => {
 app.all('/api/asaas/*', async (req, res) => {
   try {
     const asaasPath = req.path.replace('/api/asaas', '');
-    const asaasUrl = `https://api.asaas.com/v3${asaasPath}`;
+    const asaasUrl = `https://api-sandbox.asaas.com/v3${asaasPath}`;
     const asaasToken = process.env.VITE_ASAAS_API_KEY || process.env.ASAAS_API_KEY;
 
     console.log(`Proxy request: ${req.method} ${asaasUrl}`);

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api-sandbox.asaas.com/v3';
+const API_BASE_URL = import.meta.env.DEV ? '/api/asaas' : '/api/asaas';
 
 const getApiKey = () => {
   const apiKey = import.meta.env.VITE_ASAAS_API_KEY;
@@ -11,12 +11,9 @@ const getApiKey = () => {
 };
 
 const getHeaders = (contentType = 'application/json') => {
-  const apiKey = getApiKey();
-  
   return {
     'accept': 'application/json',
-    'content-type': contentType,
-    'access_token': apiKey
+    'content-type': contentType
   };
 };
 
@@ -24,20 +21,17 @@ export const crmApi = {
   // GET - Listar clientes
   getClients: async () => {
     try {
-      const url = `${API_BASE_URL}/customers`;
+      const url = `${API_BASE_URL}/v3/customers`;
       const headers = getHeaders();
       
       console.log('Requisição para:', url);
-      console.log('Headers:', { ...headers, access_token: '***' });
       
       const response = await fetch(url, {
         method: 'GET',
-        headers: headers,
-        mode: 'cors'
+        headers: headers
       });
 
       console.log('Status:', response.status);
-      console.log('Content-Type:', response.headers.get('content-type'));
 
       if (!response.ok) {
         const contentType = response.headers.get('content-type');
@@ -70,7 +64,7 @@ export const crmApi = {
   // POST - Criar cliente
   createClient: async (clientData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/customers`, {
+      const response = await fetch(`${API_BASE_URL}/v3/customers`, {
         method: 'POST',
         headers: getHeaders(),
         body: JSON.stringify(clientData)
@@ -104,7 +98,7 @@ export const crmApi = {
   // DELETE - Deletar cliente
   deleteClient: async (clientId) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/customers/${clientId}`, {
+      const response = await fetch(`${API_BASE_URL}/v3/customers/${clientId}`, {
         method: 'DELETE',
         headers: getHeaders()
       });
