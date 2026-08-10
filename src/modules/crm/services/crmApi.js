@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://api-sandbox.asaas.com/v3';
+const API_BASE_URL = import.meta.env.DEV ? '/asaas-api/v3' : 'https://api-sandbox.asaas.com/v3';
 
 const getApiKey = () => {
   const apiKey = import.meta.env.VITE_ASAAS_API_KEY;
