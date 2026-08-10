@@ -1,17 +1,22 @@
 const API_BASE_URL = import.meta.env.DEV ? '/api/asaas' : '/api/asaas';
 
+const normalizeToken = (value) => {
+  if (!value) return '';
+
+  let normalized = String(value).trim();
+
+  if (normalized.startsWith('$')) {
+    normalized = normalized.substring(1);
+  }
+
+  return normalized;
+};
+
 const getApiKey = () => {
-  let apiKey = import.meta.env.VITE_ASAAS_API_KEY || import.meta.env.ASAAS_API_KEY || '';
+  const apiKey = normalizeToken(import.meta.env.VITE_ASAAS_API_KEY || import.meta.env.ASAAS_API_KEY || '');
 
   if (!apiKey) {
     throw new Error('API Key não configurada no .env');
-  }
-
-  apiKey = apiKey.trim();
-
-  // Remover $ do início do token se existir
-  if (apiKey.startsWith('$')) {
-    apiKey = apiKey.substring(1);
   }
 
   return apiKey;
