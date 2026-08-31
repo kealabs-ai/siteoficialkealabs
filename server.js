@@ -1,6 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,12 +30,10 @@ app.all('/api/asaas/*', async (req, res) => {
   try {
     const asaasPath = req.path.replace('/api/asaas', '');
     const asaasUrl = `https://api-sandbox.asaas.com/v3${asaasPath}`;
-    const incomingToken = req.headers.access_token || req.headers.authorization?.replace(/^Bearer\s+/i, '');
-    const rawToken = incomingToken || process.env.VITE_ASAAS_API_KEY || process.env.ASAAS_API_KEY;
-    let asaasToken = rawToken ? String(rawToken).trim() : '';
+    let asaasToken = process.env.VITE_ASAAS_API_KEY || process.env.ASAAS_API_KEY;
     
     // Remover $ do início do token se existir
-    if (asaasToken.startsWith('$')) {
+    if (asaasToken?.startsWith('$')) {
       asaasToken = asaasToken.substring(1);
     }
 
