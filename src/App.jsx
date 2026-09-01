@@ -5,7 +5,7 @@ import useSmoothScroll from './hooks/useSmoothScroll';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Solucoes from './components/Solucoes';
-import Cases from './components/Cases';
+import Produto from './components/Produto';
 import Sobre from './components/Sobre';
 import Contato from './components/Contato';
 import Footer from './components/Footer';
@@ -88,7 +88,7 @@ function App() {
               <Header />
               <Hero />
               <Solucoes />
-              <Cases />
+              <Produto />
               <Sobre />
               <Contato />
               <Footer />
