@@ -17,6 +17,7 @@ import UsuariosPage from './modules/usuarios/pages/UsuariosPage';
 import RelatoriosPage from './modules/relatorios/pages/RelatoriosPage';
 import HomePage from './modules/home/pages/HomePage';
 import OrcamentosPage from './modules/orcamentos/pages/OrcamentosPage';
+import CtoKea from './pages/CtoKea';
 
 function App() {
   useSmoothScroll();
@@ -80,6 +81,9 @@ function App() {
         <Route path="/app/login" element={<ClientApp />} />
         <Route path="/app/dashboard" element={<ClientApp />} />
         
+        {/* Página de portfólio profissional */}
+        <Route path="/ctokea" element={<CtoKea />} />
+
         {/* Rota principal do site */}
         <Route
           path="/"
