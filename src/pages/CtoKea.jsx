@@ -74,7 +74,6 @@ const clients = [
   { name: 'Petrobras',       domain: 'petrobras.com.br' },
   { name: 'GEA',             domain: 'gea.com' },
   { name: 'Grupo EMS',       domain: 'ems.com.br', logoUrl: 'https://www.ems.com.br/wp-content/themes/ems/assets/images/logo-ems.png' },
-  { name: 'Compass UOL',     domain: 'uol.com.br' },
   { name: 'CEEE',            domain: 'ceee.com.br', logoUrl: 'https://diariodamanhapelotas.com.br/site/wp-content/uploads/2017/05/ceee-logo.jpg' },
   { name: 'Protege',         domain: 'protege.com.br' },
   { name: 'Grupo JCPM',      domain: 'jcpm.com.br' },
@@ -209,18 +208,43 @@ export default function CtoKea() {
     <div className="min-h-screen bg-slate-50 text-[#0A2540]" style={{ fontFamily: "'Inter', sans-serif" }}>
 
       {/* ── HERO ── */}
-      <section className="relative overflow-hidden min-h-screen flex items-center bg-white">
-        <div className="absolute inset-0 opacity-[0.04]"
-          style={{ backgroundImage: 'linear-gradient(#0A2540 1px, transparent 1px), linear-gradient(90deg, #0A2540 1px, transparent 1px)', backgroundSize: '60px 60px' }} />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#00B4D8]/8 blur-[140px] pointer-events-none" />
+      <section className="relative overflow-hidden min-h-screen flex items-center" style={{ background: 'linear-gradient(135deg, #020c1b 0%, #0A2540 40%, #061a2e 70%, #020c1b 100%)' }}>
+
+        {/* Neural grid */}
+        <div className="absolute inset-0 opacity-[0.07]"
+          style={{ backgroundImage: 'linear-gradient(rgba(0,180,216,1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,180,216,1) 1px, transparent 1px)', backgroundSize: '80px 80px' }} />
+
+        {/* Animated orbs */}
+        <div className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,180,216,0.18) 0%, transparent 70%)', animation: 'pulse 6s ease-in-out infinite' }} />
+        <div className="absolute bottom-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(16,185,129,0.14) 0%, transparent 70%)', animation: 'pulse 8s ease-in-out infinite 2s' }} />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,180,216,0.06) 0%, transparent 65%)' }} />
+
+        {/* Floating nodes SVG */}
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="ng" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#00B4D8" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#00B4D8" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          {[[120,180],[320,80],[600,200],[820,120],[200,420],[500,380],[750,460],[950,300],[150,600],[680,580],[400,520],[900,520]].map(([cx,cy],i) => (
+            <g key={i}>
+              <circle cx={cx} cy={cy} r="3" fill="#00B4D8" opacity="0.7" />
+              <circle cx={cx} cy={cy} r="12" fill="none" stroke="#00B4D8" strokeWidth="0.5" opacity="0.3" />
+            </g>
+          ))}
+          {[[120,180,320,80],[320,80,600,200],[600,200,820,120],[200,420,500,380],[500,380,750,460],[750,460,950,300],[150,600,400,520],[400,520,680,580],[680,580,900,520],[320,80,200,420],[600,200,500,380],[820,120,950,300]].map(([x1,y1,x2,y2],i) => (
+            <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#00B4D8" strokeWidth="0.5" opacity="0.25" />
+          ))}
+        </svg>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 py-24 text-center">
-          <div className="inline-flex items-center gap-2 bg-[#0A2540]/5 border border-[#00B4D8]/40 rounded-full px-4 py-1.5 text-[#0A2540] text-sm font-medium mb-8">
+          <div className="inline-flex items-center gap-2 border border-[#00B4D8]/30 rounded-full px-4 py-1.5 text-[#00B4D8] text-sm font-medium mb-8" style={{ background: 'rgba(0,180,216,0.08)', backdropFilter: 'blur(8px)' }}>
             <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
             Consultoria estratégica para negócios com IA
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-4 bg-gradient-to-br from-[#0A2540] via-[#0A2540] to-[#64748B] bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-4" style={{ background: 'linear-gradient(135deg, #ffffff 0%, #e2f4fb 40%, #00B4D8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
             Celso Henrique Leite
           </h1>
 
@@ -229,25 +253,19 @@ export default function CtoKea() {
           </p>
 
           <div className="flex items-center justify-center gap-2 mb-8">
-            <span className="text-[#64748B] text-sm">Co-Founder</span>
+            <span className="text-slate-400 text-sm">Co-Founder</span>
             <a href="https://www.kealabs.com.br" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 group">
-              <img src={logo} alt="Kealabs Intelligence" className="h-6 transition-all duration-300" />
-              <span className="text-[#64748B] text-sm font-medium group-hover:text-[#10B981] transition-colors duration-300">Intelligence</span>
+              <img src={logo} alt="Kealabs Intelligence" className="h-6 transition-all duration-300 brightness-0 invert" />
+              <span className="text-slate-400 text-sm font-medium group-hover:text-[#10B981] transition-colors duration-300">Intelligence</span>
             </a>
           </div>
 
-          <p className="text-[#64748B] text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-            Mais de <span className="text-[#0A2540] font-semibold">15 anos em tecnologia</span> — 12 anos de desenvolvimento de software (Backend, Frontend & Mobile) evoluídos para a <span className="text-[#00B4D8] font-semibold">liderança estratégica de times ágeis e de dados</span>.
+          <p className="text-slate-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            Mais de <span className="text-white font-semibold">15 anos em tecnologia</span> — 12 anos de desenvolvimento de software (Backend, Frontend & Mobile) evoluídos para a <span className="text-[#00B4D8] font-semibold">liderança estratégica de times ágeis e de dados</span>.
           </p>
 
-          <div className="flex justify-center">
-            <a
-              href="#experiencia"
-              className="inline-flex items-center justify-center gap-2 bg-[#0A2540] hover:bg-[#0A2540]/85 text-white font-bold px-8 py-3.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-              Ver Experiência
-            </a>
+          <div className="inline-flex flex-col items-center gap-1 text-[#00B4D8]/60 mt-4">
+            <svg className="w-7 h-7" style={{ animation: 'bounce 2s infinite' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" /></svg>
           </div>
         </div>
       </section>
@@ -331,6 +349,45 @@ export default function CtoKea() {
               <ClientLogo key={c.name} client={c} delay={i * 50} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── NICHOS ── */}
+      <section className="py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-6">
+          <FadeIn>
+            <div className="text-center mb-14">
+              <p className="text-[#00B4D8] text-sm font-semibold uppercase tracking-widest mb-3">Atuação</p>
+              <h2 className="text-3xl md:text-4xl font-black text-[#0A2540] mb-4">Nichos atendidos</h2>
+              <p className="text-[#64748B] max-w-xl mx-auto">Experiência consolidada em projetos de tecnologia e liderança ágil nos principais segmentos do mercado.</p>
+            </div>
+          </FadeIn>
+          <FadeIn delay={150}>
+            <div className="flex flex-wrap justify-center gap-3">
+              {[
+                { icon: '🛒', label: 'Comércio' },
+                { icon: '💹', label: 'Financeiro / Investimentos' },
+                { icon: '📋', label: 'Administração de Negócios' },
+                { icon: '⚡', label: 'Utilities Energia' },
+                { icon: '🛢️', label: 'Óleo e Gás' },
+                { icon: '🏢', label: 'Imobiliário' },
+                { icon: '💳', label: 'Cobrança' },
+                { icon: '💊', label: 'Farmacêutico' },
+                { icon: '🔒', label: 'Segurança' },
+                { icon: '🚚', label: 'Distribuição' },
+                { icon: '👥', label: 'RH' },
+                { icon: '📈', label: 'Score' },
+                { icon: '🏦', label: 'Conta Digital' },
+              ].map((n, i) => (
+                <FadeIn key={n.label} delay={i * 60}>
+                  <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-full px-5 py-2.5 hover:border-[#00B4D8]/60 hover:shadow-sm transition-all duration-200 cursor-default">
+                    <span className="text-lg">{n.icon}</span>
+                    <span className="text-[#0A2540] font-medium text-sm">{n.label}</span>
+                  </div>
+                </FadeIn>
+              ))}
+            </div>
+          </FadeIn>
         </div>
       </section>
 
