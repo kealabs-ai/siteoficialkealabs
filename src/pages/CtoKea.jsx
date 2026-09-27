@@ -391,6 +391,50 @@ export default function CtoKea() {
         </div>
       </section>
 
+      {/* ── REALIZAÇÕES ── */}
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-5xl mx-auto px-6">
+          <FadeIn>
+            <div className="text-center mb-14">
+              <p className="text-[#00B4D8] text-sm font-semibold uppercase tracking-widest mb-3">Impacto</p>
+              <h2 className="text-3xl md:text-4xl font-black text-[#0A2540]">Principais Realizações e Impacto</h2>
+            </div>
+          </FadeIn>
+          <div className="grid md:grid-cols-2 gap-6">
+            {[
+              {
+                icon: '📱',
+                title: 'Liderança em Produtos Digitais de Massa',
+                desc: 'Atuação central na remodelagem do aplicativo Meu Alelo, lidando com transações e acessos massivos de mais de 1 milhão de usuários ativos, além da coordenação do desenvolvimento de aplicativos de conta digital e sistemas de front-box para grandes distribuidores.',
+              },
+              {
+                icon: '💊',
+                title: 'Inovação com Impacto Social e Regulatório',
+                desc: <span>Coordenação e organização de equipes na entrega de um sistema pioneiro para a indústria farmacêutica com a digitalização de bulas homologadas pela ANVISA (<a href="https://www.sara.com.br" target="_blank" rel="noopener noreferrer" className="text-[#00B4D8] hover:underline font-medium">SARA</a>), gerando um impacto direto e significativo para a população em larga escala.</span>,
+              },
+              {
+                icon: '🗄️',
+                title: 'Governança, Big Data e Engenharia de Dados',
+                desc: 'Condução de projetos altamente complexos envolvendo grande volumetria de dados, incluindo a construção e estruturação de datalakes de alta performance para corretores, modelagem avançada, captação e conversão de leads em larga escala, e desenvolvimento de painéis de indicadores (dashboards) em tempo real para a alta gestão em empresas do mercado de Óleo & Gás.',
+              },
+              {
+                icon: '⚙️',
+                title: 'Eficiência Operacional e Reestruturação de TI',
+                desc: 'Concepção de projetos de Service Design para a reestruturação e organização de áreas de TI em grandes corporações, além do desenvolvimento de sistemas de campo voltados para a automação de processos críticos e fluxos intensivos de dados operacionais, como medição de hodômetros elétricos e faturamento.',
+              },
+            ].map((item, i) => (
+              <FadeIn key={item.title} delay={i * 100}>
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 hover:border-[#00B4D8]/50 hover:shadow-md transition-all duration-300 h-full">
+                  <div className="text-3xl mb-3">{item.icon}</div>
+                  <h3 className="text-[#0A2540] font-bold text-lg mb-3">{item.title}</h3>
+                  <p className="text-[#64748B] text-sm leading-relaxed">{item.desc}</p>
+                </div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── RODAPÉ / CONTATO ── */}
       <footer className="py-20 border-t border-slate-200 bg-white">
         <div className="max-w-5xl mx-auto px-6 text-center">
