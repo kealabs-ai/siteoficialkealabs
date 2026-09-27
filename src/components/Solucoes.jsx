@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Solucoes.css';
 
 const Solucoes = () => {
   const [modalOpen, setModalOpen] = useState(null);
 
+  useEffect(() => {
+    if (modalOpen === null) return undefined;
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') setModalOpen(null);
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [modalOpen]);
+
   const solucoes = [
     {
-      titulo: 'Desenvolvimento de APIs',
+      titulo: 'Integração entre sistemas',
       descricao: 'Conecte dados do seu sistema de forma simples para tomar decisões inteligentes, otimizar vendas e reduzir custos.',
       cor: 'verde',
       icon: '🔌'
@@ -51,29 +67,43 @@ const Solucoes = () => {
               key={index} 
               className={`solucao-card ${solucao.cor}`}
               onClick={() => setModalOpen(index)}
-              style={{ cursor: 'pointer' }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setModalOpen(index);
+                }
+              }}
+              role="button"
+              tabIndex="0"
             >
-              <div className="solucao-icon">{solucao.icon}</div>
-              <h3>{solucao.titulo}</h3>
-              <p>{solucao.descricao}</p>
+              <div className="solucao-card-top">
+                <span className="solucao-index">0{index + 1}</span>
+                <span className="solucao-arrow" aria-hidden="true">↗</span>
+              </div>
+              <div className="solucao-icon" aria-hidden="true">{solucao.icon}</div>
+              <div className="solucao-card-body">
+                <h3>{solucao.titulo}</h3>
+                <p>{solucao.descricao}</p>
+              </div>
+              <span className="solucao-card-link">Ver solução <span aria-hidden="true">→</span></span>
             </div>
           ))}
         </div>
       </div>
 
       {modalOpen === 0 && (
-        <div className="modal-overlay">
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setModalOpen(null)}>✕</button>
-            <div className="modal-header">
-              <div className="modal-icon">🔌</div>
-              <h2>Desenvolvimento de APIs</h2>
+        <div className="service-modal-overlay" onClick={() => setModalOpen(null)}>
+          <div className="service-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-0" onClick={(e) => e.stopPropagation()}>
+            <button className="service-modal-close" aria-label="Fechar detalhes do serviço" onClick={() => setModalOpen(null)}>✕</button>
+            <div className="service-modal-header">
+              <div className="service-modal-icon">🔌</div>
+              <div><span className="service-modal-eyebrow">Serviço 01 · Dados conectados</span><h2 id="modal-title-0">Integração entre sistemas</h2></div>
             </div>
-            <p className="modal-intro">
+            <p className="service-modal-intro">
               Conecte os dados do seu sistema e transforme informações brutas em insights valiosos para o seu negócio.
             </p>
             
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Conexão Simples e Direta:</h3>
               <p>
                 Nossa plataforma se conecta de forma segura e descomplicada ao seu sistema de gestão (ERP, CRM, etc.), 
@@ -81,7 +111,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Análise Inteligente de Dados:</h3>
               <p>
                 Extraímos e processamos seus dados automaticamente. Isso permite identificar padrões e tendências, 
@@ -89,7 +119,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Informações Valiosas para Decisões Inteligentes:</h3>
               <p>Com os dados organizados, você obtém uma visão completa do seu desempenho. Isso te ajuda a:</p>
               <ul>
@@ -99,7 +129,7 @@ const Solucoes = () => {
               </ul>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Acesse de Onde Estiver:</h3>
               <p>
                 Todas essas informações estão disponíveis em um painel interativo, acessível a qualquer momento. 
@@ -111,23 +141,23 @@ const Solucoes = () => {
       )}
 
       {modalOpen === 1 && (
-        <div className="modal-overlay">
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setModalOpen(null)}>✕</button>
-            <div className="modal-header">
-              <div className="modal-icon">💻</div>
-              <h2>Desenvolvimento Front-end e Sites Corporativos</h2>
+        <div className="service-modal-overlay" onClick={() => setModalOpen(null)}>
+          <div className="service-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-1" onClick={(e) => e.stopPropagation()}>
+            <button className="service-modal-close" aria-label="Fechar detalhes do serviço" onClick={() => setModalOpen(null)}>✕</button>
+            <div className="service-modal-header">
+              <div className="service-modal-icon">💻</div>
+              <div><span className="service-modal-eyebrow">Serviço 02 · Experiência digital</span><h2 id="modal-title-1">Desenvolvimento Front-end e Sites Corporativos</h2></div>
             </div>
-            <p className="modal-intro">
+            <p className="service-modal-intro">
               Como a Kealabs cria telas inteligentes?
             </p>
-            <p className="modal-intro-text">
+            <p className="service-modal-intro-text">
               Na Kealabs, transformamos a entrada de dados em uma experiência eficiente e sem esforço. 
               Usamos a inteligência de software para criar telas personalizadas que não apenas parecem boas, 
               mas que otimizam o seu fluxo de trabalho.
             </p>
             
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Telas Personalizadas e Intuitivas:</h3>
               <p>
                 Projetamos cada tela pensando na sua equipe. O design é claro, a navegação é simples e a 
@@ -136,7 +166,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Importação Inteligente de Dados:</h3>
               <p>
                 A entrada manual de dados é coisa do passado. Nossa tecnologia permite que você importe 
@@ -145,7 +175,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Automação para Produtividade Máxima:</h3>
               <p>
                 As telas são desenvolvidas para automatizar tarefas repetitivas. Ao importar um arquivo, 
@@ -154,7 +184,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Acabe com o Trabalho Manual:</h3>
               <p>
                 Com a Kealabs, você não apenas digitaliza processos, mas os otimiza. Chega de copiar e colar 
@@ -167,22 +197,22 @@ const Solucoes = () => {
       )}
 
       {modalOpen === 2 && (
-        <div className="modal-overlay">
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setModalOpen(null)}>✕</button>
-            <div className="modal-header">
-              <div className="modal-icon">🤖</div>
-              <h2>Engenharia de IA</h2>
+        <div className="service-modal-overlay" onClick={() => setModalOpen(null)}>
+          <div className="service-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-2" onClick={(e) => e.stopPropagation()}>
+            <button className="service-modal-close" aria-label="Fechar detalhes do serviço" onClick={() => setModalOpen(null)}>✕</button>
+            <div className="service-modal-header">
+              <div className="service-modal-icon">🤖</div>
+              <div><span className="service-modal-eyebrow">Serviço 03 · Inteligência aplicada</span><h2 id="modal-title-2">Engenharia de IA</h2></div>
             </div>
-            <p className="modal-intro">
+            <p className="service-modal-intro">
               Como nossos agentes e prompts de IA funcionam?
             </p>
-            <p className="modal-intro-text">
+            <p className="service-modal-intro-text">
               Utilizamos inteligência artificial para criar assistentes virtuais e ferramentas que potencializam 
               o seu time, permitindo que eles trabalhem de forma mais inteligente e estratégica.
             </p>
             
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Agentes de IA para Resolução de Dúvidas:</h3>
               <p>
                 Nossos agentes de IA são treinados com a base de conhecimento da sua empresa. Eles podem responder 
@@ -192,7 +222,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Prompts Inteligentes para Otimização da Comunicação:</h3>
               <p>
                 Criamos prompts personalizados que agilizam a criação de conteúdos, como e-mails, relatórios, propostas 
@@ -201,7 +231,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Análises Aceleradas e Inteligentes:</h3>
               <p>
                 Nossos agentes podem processar grandes volumes de dados rapidamente, gerando insights e resumos executivos. 
@@ -210,7 +240,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Foco na Estratégia:</h3>
               <p>
                 Ao automatizar tarefas repetitivas e aprimorar a comunicação e a análise, nossa solução permite que seus 
@@ -223,23 +253,23 @@ const Solucoes = () => {
       )}
 
       {modalOpen === 3 && (
-        <div className="modal-overlay">
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setModalOpen(null)}>✕</button>
-            <div className="modal-header">
-              <div className="modal-icon">📊</div>
-              <h2>Criação de Dashboards</h2>
+        <div className="service-modal-overlay" onClick={() => setModalOpen(null)}>
+          <div className="service-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-3" onClick={(e) => e.stopPropagation()}>
+            <button className="service-modal-close" aria-label="Fechar detalhes do serviço" onClick={() => setModalOpen(null)}>✕</button>
+            <div className="service-modal-header">
+              <div className="service-modal-icon">📊</div>
+              <div><span className="service-modal-eyebrow">Serviço 04 · Visão executiva</span><h2 id="modal-title-3">Criação de Dashboards</h2></div>
             </div>
-            <p className="modal-intro">
+            <p className="service-modal-intro">
               Como transformamos dados em decisões?
             </p>
-            <p className="modal-intro-text">
+            <p className="service-modal-intro-text">
               Nossa solução de Business Intelligence (BI) vai além de simplesmente apresentar números. 
               Nós organizamos e visualizamos seus dados de forma intuitiva para que você tenha uma visão clara 
               e acionável do seu negócio.
             </p>
             
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Coleta e Conexão de Dados:</h3>
               <p>
                 Nós conectamos a nossa plataforma às suas fontes de dados, como sistemas de vendas, planilhas financeiras, 
@@ -248,7 +278,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Criação de Dashboards Intuitivos:</h3>
               <p>
                 Com os dados coletados, criamos dashboards personalizados e fáceis de usar. Gráficos, tabelas e 
@@ -257,7 +287,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Análise e Acompanhamento Completo:</h3>
               <p>
                 Os dashboards permitem que você acompanhe o desempenho de diferentes áreas, como vendas, marketing, 
@@ -266,7 +296,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Ação e Otimização de Resultados:</h3>
               <p>
                 A informação é a base para a ação. Com nossos dashboards, você pode identificar rapidamente quais 
@@ -279,22 +309,22 @@ const Solucoes = () => {
       )}
 
       {modalOpen === 4 && (
-        <div className="modal-overlay">
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={() => setModalOpen(null)}>✕</button>
-            <div className="modal-header">
-              <div className="modal-icon">🚀</div>
-              <h2>Consultoria de Lean Delivery</h2>
+        <div className="service-modal-overlay" onClick={() => setModalOpen(null)}>
+          <div className="service-modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title-4" onClick={(e) => e.stopPropagation()}>
+            <button className="service-modal-close" aria-label="Fechar detalhes do serviço" onClick={() => setModalOpen(null)}>✕</button>
+            <div className="service-modal-header">
+              <div className="service-modal-icon">🚀</div>
+              <div><span className="service-modal-eyebrow">Serviço 05 · Fluxo de valor</span><h2 id="modal-title-4">Consultoria de Lean Delivery</h2></div>
             </div>
-            <p className="modal-intro">
+            <p className="service-modal-intro">
               Acelere suas entregas e elimine desperdícios
             </p>
-            <p className="modal-intro-text">
+            <p className="service-modal-intro-text">
               Nossa consultoria em Lean Delivery ajuda sua empresa a otimizar processos, reduzir desperdícios e 
               acelerar o fluxo de valor. Começamos com o que você tem hoje e transformamos para entregar melhor amanhã.
             </p>
             
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Diagnóstico e Mapeamento de Valor:</h3>
               <p>
                 Analisamos seus processos atuais para identificar gargalos, desperdícios e oportunidades de melhoria. 
@@ -303,7 +333,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Implementação de Práticas Ágeis:</h3>
               <p>
                 Aplicamos metodologias Lean e Ágeis adaptadas à realidade da sua empresa. Implementamos ciclos curtos 
@@ -311,7 +341,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>Otimização Contínua:</h3>
               <p>
                 Estabelecemos métricas claras e processos de melhoria contínua. Sua equipe aprende a identificar problemas 
@@ -319,7 +349,7 @@ const Solucoes = () => {
               </p>
             </div>
 
-            <div className="modal-section">
+            <div className="service-modal-section">
               <h3>O que você ganha:</h3>
               <ul>
                 <li><strong>Entregas mais rápidas:</strong> Reduza o tempo de ciclo e aumente a velocidade de entrega ao mercado.</li>

@@ -11,7 +11,7 @@ const Hero = () => {
               Transforme <span className="highlight-verde">Dados</span> em <span className="highlight-laranja">Decisões</span> Inteligentes
             </h1>
             <p className="hero-subtitle">
-              Soluções em IA, APIs e Dashboards que impulsionam o crescimento do seu negócio com tecnologia de ponta
+              Soluções em IA, Integrações, Consultoria Inteligente e Dashboards que impulsionam o crescimento do seu negócio com tecnologia de ponta
             </p>
             
             <div className="hero-features">
@@ -24,8 +24,8 @@ const Hero = () => {
                 <span className="feature-text">Resultados Mensuráveis</span>
               </div>
               <div className="feature-item">
-                <span className="feature-icon">🔒</span>
-                <span className="feature-text">Segurança Garantida</span>
+                <span className="feature-icon">🏆</span>
+                <span className="feature-text">Foco em Resultado</span>
               </div>
             </div>
 

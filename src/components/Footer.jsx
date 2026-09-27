@@ -24,7 +24,7 @@ const Footer = () => {
             
             <div className="footer-column">
               <h4>Serviços</h4>
-              <a href="#servicos">Desenvolvimento de APIs</a>
+              <a href="#servicos">Integração entre sistemas</a>
               <a href="#servicos">Front-end e Sites Corporativos</a>
               <a href="#servicos">Engenharia de IA</a>
               <a href="#servicos">Criação de Dashboards</a>
