@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Produto.css';
+import ProductModal from './ProductModal';
 
 const Produto = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -215,80 +216,12 @@ const Produto = () => {
         </div>
       </section>
 
-      {/* Modal */}
-      {selectedProduct && (
-        <div className="modal-overlay" onClick={closeModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={closeModal}>✕</button>
-            
-            <div className="modal-header">
-              <div className="modal-icone">{selectedProduct.icone}</div>
-              <h2>{selectedProduct.descricaoCompleta.titulo}</h2>
-              <p className="modal-subtitulo">{selectedProduct.descricaoCompleta.subtitulo}</p>
-              {selectedProduct.id === 2 && (
-                <a href="https://www.matheuspersonal.com.br" target="_blank" rel="noopener noreferrer" className="modal-link" title="Visitar site">
-                  🌐
-                </a>
-              )}
-              {selectedProduct.id === 3 && (
-                <a href="https://www.kealex.com.br" target="_blank" rel="noopener noreferrer" className="modal-link" title="Visitar site">
-                  🌐
-                </a>
-              )}
-            </div>
-
-            <div className="modal-body">
-              <p className="modal-descricao">{selectedProduct.descricaoCompleta.descricao}</p>
-
-              {/* Funcionalidades */}
-              <div className="modal-section">
-                <h3>Funcionalidades Principais</h3>
-                <div className="funcionalidades-grid">
-                  {selectedProduct.descricaoCompleta.funcionalidades.map((func, idx) => (
-                    <div key={idx} className="funcionalidade-item">
-                      <h4>{func.titulo}</h4>
-                      <p>{func.descricao}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Modelo de Negócio */}
-              <div className="modal-section">
-                <h3>Modelo de Negócio</h3>
-                <div className="modelo-grid">
-                  {selectedProduct.descricaoCompleta.modeloNegocio.map((modelo, idx) => (
-                    <div key={idx} className="modelo-item">
-                      <h4>{modelo.titulo}</h4>
-                      <p>{modelo.descricao}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Benefícios */}
-              <div className="modal-section">
-                <h3>Benefícios</h3>
-                <div className="beneficios-lista">
-                  {selectedProduct.descricaoCompleta.beneficios.map((beneficio, idx) => (
-                    <div key={idx} className="beneficio-item">
-                      <span className="beneficio-check">✓</span>
-                      <p>{beneficio}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div className="modal-cta">
-                <a href="#contato" className="btn-primary" onClick={closeModal}>
-                  Solicite uma Demonstração
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ProductModal 
+        isOpen={!!selectedProduct} 
+        onClose={closeModal} 
+        data={selectedProduct ? { ...selectedProduct, link: selectedProduct.id === 2 ? 'https://www.matheuspersonal.com.br' : selectedProduct.id === 3 ? 'https://www.kealex.com.br' : null } : null}
+        type="product"
+      />
     </>
   );
 };
